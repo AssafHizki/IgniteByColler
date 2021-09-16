@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 import { GeneralDesign } from './utils';
 import { makeStyles } from '@material-ui/core/styles';
 import browserHistory from '../routes/history';
+import { signIn } from '../firebase/functions';
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -13,13 +14,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-
-export default function SignIn() {
+export default function SignIn({ setUser }) {
     const classes = useStyles();
+    const [email, setEmail] = React.useState();
+    const [password, setPassword] = React.useState();
+    const [error, setError] = React.useState(false);
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        browserHistory.push("/dashboard");
+        setError(false);
+        signIn(email, password)
+            .then(user => {
+                if (user) {
+                    setUser(user);
+                    browserHistory.push("/dashboard");
+                }
+                else {
+                    setError(true);
+                }
+            })
+            .catch(e => console.log("error: ", e))
     };
 
     return (
@@ -34,6 +48,8 @@ export default function SignIn() {
                     name="email"
                     autoComplete="email"
                     autoFocus
+                    onChange={e => { setEmail(e.target.value); setError(false); }}
+                    error={error}
                 />
                 <TextField
                     margin="normal"
@@ -44,6 +60,9 @@ export default function SignIn() {
                     type="password"
                     id="password"
                     autoComplete="current-password"
+                    onChange={e => { setPassword(e.target.value); setError(false); }}
+                    error={error}
+                    helperText={error && "Email or password error"}
                 />
                 <Button
                     type="submit"
@@ -55,7 +74,7 @@ export default function SignIn() {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link component='button' onClick={() => console.log("AA")} variant="body2">
+                        <Link href="signup" variant="body2">
                             Forgot password?
                         </Link>
                     </Grid>

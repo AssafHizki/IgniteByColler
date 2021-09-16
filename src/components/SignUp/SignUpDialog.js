@@ -13,6 +13,7 @@ import { createTheme } from '@mui/material/styles';
 import Checkbox from '@material-ui/core/Checkbox';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import browserHistory from '../../routes/history';
+import { createUser } from '../../firebase/functions';
 
 const styles = (theme) => ({
     root: {
@@ -59,12 +60,18 @@ const DialogActions = withStyles((theme) => ({
 export default function SignUpDialog({ onClose, data }) {
     const theme = createTheme();
     const classes = styles(theme);
+    const [email, setEmail] = React.useState();
+    const [password, setPassword] = React.useState();
 
     const handleSubmit = () => {
-        browserHistory.push("/signin");
+        createUser({ ...data, email, password })
+            .then(user => {
+                if (user) {
+                    browserHistory.push("/signin");
+                }
+            })
+            .catch(e => console.log("E: ", e))
     }
-
-    console.log("data: ", data);
 
     return (
         <Dialog onClose={onClose} aria-labelledby="customized-dialog-title" open>
@@ -82,6 +89,7 @@ export default function SignUpDialog({ onClose, data }) {
                         name="ignite_email"
                         autoComplete="ignite_email"
                         autoFocus
+                        onChange={e => setEmail(e.target.value)}
                     />
                     <TextField
                         margin="normal"
@@ -92,6 +100,7 @@ export default function SignUpDialog({ onClose, data }) {
                         type="password"
                         id="ignite_password"
                         autoComplete="ignite_password"
+                        onChange={e => setPassword(e.target.value)}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}

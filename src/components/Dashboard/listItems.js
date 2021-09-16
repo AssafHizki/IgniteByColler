@@ -8,6 +8,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogOutIcon from '@mui/icons-material/Logout';
 import browserHistory from '../../routes/history';
+import { logOut } from '../../firebase/functions';
 
 export const mainListItems = (
     <div>
@@ -47,7 +48,7 @@ export const secondaryListItems = (
             </ListItemIcon>
             <ListItemText primary="Personal Details" />
         </ListItem>
-        <ListItem button onClick={() => browserHistory.push("/")}>
+        <ListItem button onClick={() => { logOut(); browserHistory.push("/") }}>
             <ListItemIcon>
                 <LogOutIcon />
             </ListItemIcon>

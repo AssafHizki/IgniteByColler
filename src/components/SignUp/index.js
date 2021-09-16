@@ -26,7 +26,7 @@ export default function SignUp() {
             </div>
             <Grid container>
                 <Grid item xs>
-                    <Link component='button' onClick={() => console.log("AA")} variant="body2">
+                    <Link href="signin" variant="body2">
                         Contact us
                     </Link>
                 </Grid>

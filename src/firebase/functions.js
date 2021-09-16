@@ -1,11 +1,42 @@
-import { db } from './index';
+import { db, auth } from './index';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
+import { setDoc, doc, getDoc } from 'firebase/firestore/lite';
 
-// Get a list of cities from your database
-async function getCities() {
-    const citiesCol = collection(db, 'cities');
-    const citySnapshot = await getDocs(citiesCol);
-    const cityList = citySnapshot.docs.map(doc => doc.data());
-    return cityList;
+const createUser = async (data) => {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+            setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
+                .then(() => { return true })
+        })
+        .catch((error) => {
+            console.log("err: ", error);
+            return false;
+        });
 }
 
-export { getCities }
+const signIn = async (email, password) => {
+    return signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+            return getUser(userCredential.user.uid)
+        })
+        .catch(e => { console.log("Error: ", e); return false })
+}
+
+const logOut = async () => {
+    return signOut(auth)
+        .then(() => {
+            return true;
+        })
+        .catch(e => { console.log("Error: ", e); return false })
+}
+
+const getUser = async (id) => {
+    if (!id) {
+        return false;
+    }
+    return getDoc(doc(db, 'users', id))
+        .then(userDoc => { if (userDoc.exists) { return userDoc.data() } return false; })
+        .catch(e => { console.log("E: ", e); return false; })
+}
+
+export { createUser, signIn, getUser, logOut }

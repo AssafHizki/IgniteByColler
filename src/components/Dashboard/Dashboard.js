@@ -2,6 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import DrawerWithChildren from './Drawer';
 import StickyNote from './StickyNote';
+import browserHistory from '../../routes/history';
 
 const pitch = "At the age of 43 he made the decision to jump out of a plane.\n" +
     "The idea scared the shit out of him but the reward of finally feeling like a real man was worth it. So all geared up away he flew — the plane’s door open during the whole flight.\n" +
@@ -22,16 +23,22 @@ const join = "He used a pencil to say goodbye. Maybe that would make it less per
     "He’d left the note next to the TV. Burnable, tearable. Eraseable.\n" +
     "Maybe after they did all that, they’d remember he was just their son."
 
-function DashboardContent() {
+export default function Dashboard(props) {
     let data = [];
+    const user = props.user;
+
+    React.useEffect(() => {
+        if (!props.user) {
+            browserHistory.push("/");
+        }
+    }, [props.user])
 
     for (let i = 0;i < 20;i++) {
         data.push({ elevatorPitch: pitch + i, whyJoin: join + i });
     }
 
-
     return (
-        <DrawerWithChildren>
+        <DrawerWithChildren user={user}>
             {data.map((note, index) => {
 
                 return (
@@ -42,8 +49,4 @@ function DashboardContent() {
             })}
         </DrawerWithChildren>
     );
-}
-
-export default function Dashboard() {
-    return <DashboardContent />;
 }

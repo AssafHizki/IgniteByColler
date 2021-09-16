@@ -63,8 +63,8 @@ export default function SignUpDetails(props) {
         let data = {
             whyJoin,
             elevatorPitch,
-            superPowers: Object.entries(superPowers).filter((v) => { return v[1] }),
-            fields: Object.entries(fields).filter((v) => { return v[1] }),
+            // superPowers: Object.entries(superPowers).filter((v) => { return v[1] }),
+            // fields: Object.entries(fields).filter((v) => { return v[1] }),
         }
         setDialog(<SignUpDialog onClose={() => setDialog()} data={data} />)
     };
