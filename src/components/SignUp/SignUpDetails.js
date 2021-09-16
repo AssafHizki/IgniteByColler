@@ -79,19 +79,19 @@ export default function SignUpDetails(props) {
                 <FormGroup>
                     <FormControlLabel
                         control={<Checkbox checked={superPowers.managment} onChange={changeSuperPower} name="managment" />}
-                        label="Gilad Gray"
+                        label="Managment (fundraising, strategy, BI, etc)"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={superPowers.tech} onChange={changeSuperPower} name="tech" />}
-                        label="Jason Killian"
+                        label="Tech (development, POC / MVP, etc)"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={superPowers.product} onChange={changeSuperPower} name="product" />}
-                        label="Antoine Llorca"
+                        label="Product (PM, fundraising, etc"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={superPowers.cusomers} onChange={changeSuperPower} name="cusomers" />}
-                        label="Antoine Llorca"
+                        label="Cstomers (marketing, sales, distribution channels, etc"
                     />
                     <FormControlLabel
                         control={
@@ -112,19 +112,19 @@ export default function SignUpDetails(props) {
                 <FormGroup>
                     <FormControlLabel
                         control={<Checkbox checked={fields.foodtech} onChange={changeField} name="foodtech" />}
-                        label="Gilad Gray"
+                        label="Foodtech / Agritech"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={fields.fintech} onChange={changeField} name="fintech" />}
-                        label="Jason Killian"
+                        label="Fintech"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={fields.cyber} onChange={changeField} name="cyber" />}
-                        label="Antoine Llorca"
+                        label="Cyber"
                     />
                     <FormControlLabel
                         control={<Checkbox checked={fields.industry} onChange={changeField} name="industry" />}
-                        label="Antoine Llorca"
+                        label="Industry 4.1"
                     />
                     <FormControlLabel
                         control={
