@@ -9,6 +9,7 @@ import { Copyright } from './utils';
 import logo from '../images/logo.png';
 import { makeStyles } from '@material-ui/core/styles';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import browserHistory from '../routes/history'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -52,7 +53,8 @@ export default function GeneralDesign(props) {
                         )
                     }
 
-                    <Avatar variant="square" src={logo} classes={{ root: classes.avatar }} alt="Logo" />
+                    <Avatar variant="square" src={logo} classes={{ root: classes.avatar }} alt="Logo"
+                        onClick={() => browserHistory.push("/")} />
                     <Typography variant="h5" style={{ marginBottom: 5 }}>
                         {props.title ? props.title : "Ignite By Coller"}
                     </Typography>

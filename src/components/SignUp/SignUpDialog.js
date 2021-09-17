@@ -72,7 +72,6 @@ export default function SignUpDialog({ onClose, data }) {
                     browserHistory.push("/signin");
                 }
                 else {
-                    console.log("Bad");
                     setError(true);
                 }
             })
