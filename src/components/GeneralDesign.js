@@ -8,6 +8,7 @@ import { createTheme } from '@mui/material/styles';
 import { Copyright } from './utils';
 import logo from '../images/logo.png';
 import { makeStyles } from '@material-ui/core/styles';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -45,6 +46,12 @@ export default function GeneralDesign(props) {
             <Grid item xs={false} sm={false} md={7} className={classes.image} />
             <Grid item sm={8} md={5} >
                 <div className={classes.paper}>
+                    {
+                        props.goBack && (
+                            <ArrowBackIcon onClick={() => props.goBack()} />
+                        )
+                    }
+
                     <Avatar variant="square" src={logo} classes={{ root: classes.avatar }} alt="Logo" />
                     <Typography variant="h5" style={{ marginBottom: 5 }}>
                         {props.title ? props.title : "Ignite By Coller"}

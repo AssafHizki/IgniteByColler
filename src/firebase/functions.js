@@ -3,13 +3,13 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } f
 import { setDoc, doc, getDoc } from 'firebase/firestore/lite';
 
 const createUser = async (data) => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
+    return createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
-            setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
+            return setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
                 .then(() => { return true })
         })
         .catch((error) => {
-            console.log("err: ", error);
+            console.log("err: ", error.message);
             return false;
         });
 }

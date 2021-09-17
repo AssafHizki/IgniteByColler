@@ -62,15 +62,21 @@ export default function SignUpDialog({ onClose, data }) {
     const classes = styles(theme);
     const [email, setEmail] = React.useState();
     const [password, setPassword] = React.useState();
+    const [error, setError] = React.useState(false);
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         createUser({ ...data, email, password })
             .then(user => {
                 if (user) {
                     browserHistory.push("/signin");
                 }
+                else {
+                    console.log("Bad");
+                    setError(true);
+                }
             })
-            .catch(e => console.log("E: ", e))
+            .catch(e => { console.log("E: ", e); setError(true); })
     }
 
     return (
@@ -79,7 +85,7 @@ export default function SignUpDialog({ onClose, data }) {
                 Last thing
             </DialogTitle>
             <DialogContent dividers>
-                <form className={classes.form}>
+                <form className={classes.form} onSubmit={handleSubmit}>
                     <TextField
                         margin="normal"
                         required
@@ -89,7 +95,8 @@ export default function SignUpDialog({ onClose, data }) {
                         name="ignite_email"
                         autoComplete="ignite_email"
                         autoFocus
-                        onChange={e => setEmail(e.target.value)}
+                        onChange={e => { setEmail(e.target.value); setError(false); }}
+                        error={error}
                     />
                     <TextField
                         margin="normal"
@@ -100,26 +107,35 @@ export default function SignUpDialog({ onClose, data }) {
                         type="password"
                         id="ignite_password"
                         autoComplete="ignite_password"
-                        onChange={e => setPassword(e.target.value)}
+                        onChange={e => { setPassword(e.target.value); setError(false); }}
+                        helperText={error && "Password should be at least 6 characters or email is taken"}
+                        error={error}
                     />
                     <FormControlLabel
                         control={<Checkbox value="remember" color="primary" />}
                         label="I have read and agreed to the terms and conditions"
                     />
+                    <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign up
+                        </Button>
+                        <Button
+                            onClick={onClose}
+                            variant="contained"
+                            color="secondary"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Go Back
+                        </Button>
+                    </div>
                 </form>
             </DialogContent>
-            <DialogActions>
-                {
-                    (<Button color="primary" onClick={() => handleSubmit()}>
-                        Sign Up
-                    </Button>)
-                }
-                {
-                    (<Button onClick={onClose} color="secondary" >
-                        Go Back
-                    </Button>)
-                }
-            </DialogActions>
+
         </Dialog>
     );
 }
