@@ -8,11 +8,10 @@ import PeopleIcon from '@mui/icons-material/People';
 import AssignmentIcon from '@mui/icons-material/Assignment';
 import LogOutIcon from '@mui/icons-material/Logout';
 import browserHistory from '../../routes/history';
-import { logOut } from '../../firebase/functions';
 
 export const mainListItems = (
     <div>
-        <ListItem button>
+        <ListItem button onClick={() => browserHistory.push("/dashboard")}>
             <ListItemIcon>
                 <DashboardIcon />
             </ListItemIcon>
@@ -30,25 +29,31 @@ export const mainListItems = (
 export const secondaryListItems = (
     <div>
         <ListSubheader inset>My Profile</ListSubheader>
-        <ListItem button>
+        <ListItem button onClick={() => browserHistory.push("/powers")}>
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Powers" />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => browserHistory.push("/fields")}>
+            <ListItemIcon>
+                <AssignmentIcon />
+            </ListItemIcon>
+            <ListItemText primary="Fields" />
+        </ListItem>
+        <ListItem button onClick={() => browserHistory.push("/pitch")}>
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Pitch" />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => browserHistory.push("/personaldetails")}>
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>
             <ListItemText primary="Personal Details" />
         </ListItem>
-        <ListItem button onClick={() => { logOut(); browserHistory.push("/") }}>
+        <ListItem button onClick={() => browserHistory.push("/logout")}>
             <ListItemIcon>
                 <LogOutIcon />
             </ListItemIcon>

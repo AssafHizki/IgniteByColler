@@ -7,6 +7,7 @@ import { GeneralDesign } from './utils';
 import { makeStyles } from '@material-ui/core/styles';
 import browserHistory from '../routes/history';
 import { signIn } from '../firebase/functions';
+import { UserContext } from '../AuthContext';
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -14,22 +15,25 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn({ setUser }) {
+export default function SignIn() {
     const classes = useStyles();
     const [email, setEmail] = React.useState();
     const [password, setPassword] = React.useState();
     const [error, setError] = React.useState(false);
+    const user = React.useContext(UserContext);
+
+    React.useEffect(() => {
+        if (user) {
+            browserHistory.push("/dashboard");
+        }
+    }, [user])
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         setError(false);
         signIn(email, password)
-            .then(user => {
-                if (user) {
-                    setUser(user);
-                    browserHistory.push("/dashboard");
-                }
-                else {
+            .then(thisUser => {
+                if (!thisUser) {
                     setError(true);
                 }
             })

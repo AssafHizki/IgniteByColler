@@ -9,12 +9,10 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { mainListItems, secondaryListItems } from './listItems';
 import { Copyright } from '../utils';
 import Avatar from '@material-ui/core/Avatar';
@@ -22,6 +20,8 @@ import { deepPurple } from '@material-ui/core/colors';
 import { makeStyles } from '@material-ui/core/styles';
 import logo from '../../images/logo.png';
 import ListSubheader from '@mui/material/ListSubheader';
+import { UserContext } from '../../AuthContext';
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -85,10 +85,13 @@ const mdTheme = createTheme();
 
 export default function DrawerWithChildren(props) {
     const [open, setOpen] = React.useState(true);
+    const user = React.useContext(UserContext);
+    const location = useLocation();
+    const classes = useStyles();
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
-    const classes = useStyles();
 
     return (
         <ThemeProvider theme={mdTheme}>
@@ -119,20 +122,21 @@ export default function DrawerWithChildren(props) {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Dashboard
+                            {
+                                location.pathname === "/personaldetails" ?
+                                    "Personal Details"
+                                    :
+                                    location.pathname[1].toUpperCase() + location.pathname.slice(2, location.pathname.length)}
                         </Typography>
-                        <IconButton color="inherit">
-                            <Badge badgeContent={4} color="secondary">
-                                <NotificationsIcon />
-                            </Badge>
-                        </IconButton>
                     </Toolbar>
                 </AppBar>
                 <Drawer variant="permanent" open={open} >
                     <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <Avatar className={classes.purple} style={{ marginLeft: 10 }}>AH</Avatar>
+                        <Avatar className={classes.purple} style={{ marginLeft: 10 }}>
+                            {user && user.fullName && user.fullName.at(0).toLocaleUpperCase()}{user && user.fullName.split(' ')[1]?.at(0).toLocaleUpperCase()}
+                        </Avatar>
                         <Typography>
-                            Assaf Hizki
+                            {user && user.fullName}
                         </Typography>
                         <Toolbar
                             sx={{

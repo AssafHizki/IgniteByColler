@@ -61,11 +61,25 @@ export default function SignUpDetails(props) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+
+        let thisSuperPowers = Object.entries(superPowers).filter((v) => { return v[1] });
+        let thisFields = Object.entries(fields).filter((v) => { return v[1] });
+
+        if (thisSuperPowers.length < 1 || thisSuperPowers.length > 2 ||
+            thisFields.length < 1 && thisFields.length > 3) {
+            return false;
+        }
+
+        let currSuperPowers = [];
+        let currFields = [];
+        thisSuperPowers.forEach(s => currSuperPowers.push(s[0] !== "other" ? s[0] : s[1]))
+        currFields.forEach(s => currFields.push(s[0] !== "other" ? s[0] : s[1]))
+
         let data = {
             whyJoin,
             elevatorPitch,
-            // superPowers: Object.entries(superPowers).filter((v) => { return v[1] }),
-            // fields: Object.entries(fields).filter((v) => { return v[1] }),
+            powers: currSuperPowers,
+            fields: currFields,
         }
         setDialog(<SignUpDialog onClose={() => setDialog()} data={data} />)
     };
@@ -90,11 +104,11 @@ export default function SignUpDetails(props) {
                         />
                         <FormControlLabel
                             control={<Checkbox checked={superPowers.product} onChange={changeSuperPower} name="product" />}
-                            label="Product (PM, fundraising, etc"
+                            label="Product (PM, fundraising, etc)"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={superPowers.cusomers} onChange={changeSuperPower} name="cusomers" />}
-                            label="Cstomers (marketing, sales, distribution channels, etc"
+                            control={<Checkbox checked={superPowers.customers} onChange={changeSuperPower} name="customers" />}
+                            label="Customers (marketing, sales, distribution channels, etc)"
                         />
                         <FormControlLabel
                             control={
@@ -154,6 +168,7 @@ export default function SignUpDetails(props) {
                         autoComplete="elevator_pitch"
                         onChange={e => setElevatorPitch(e.target.value)}
                         value={elevatorPitch}
+                        multiline
                     />
                     <TextField
                         variant="outlined"
@@ -165,6 +180,7 @@ export default function SignUpDetails(props) {
                         autoComplete="why_should_join"
                         onChange={e => setWhyJoin(e.target.value)}
                         value={whyJoin}
+                        multiline
                     />
                     <Button
                         type="submit"

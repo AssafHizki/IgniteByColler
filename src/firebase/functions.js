@@ -1,10 +1,16 @@
 import { db, auth } from './index';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "firebase/auth";
-import { setDoc, doc, getDoc } from 'firebase/firestore/lite';
+import {
+    signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut,
+    updatePassword, updateEmail
+} from "firebase/auth";
+import { setDoc, doc, getDoc, updateDoc } from 'firebase/firestore/lite';
 
 const createUser = async (data) => {
     return createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
+            delete data.password;
+            delete data.email;
+
             return setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
                 .then(() => { return true })
         })
@@ -39,4 +45,33 @@ const getUser = async (id) => {
         .catch(e => { console.log("E: ", e); return false; })
 }
 
-export { createUser, signIn, getUser, logOut }
+const updateUser = async (props) => {
+    if (!props) {
+        return false;
+    }
+
+    return updateDoc(doc(db, 'users', auth.currentUser.uid), { ...props })
+        .then(() => logOut())
+        .catch(e => { console.log("E: ", e); return false; })
+}
+
+const updateUserAuth = async (email = null, password = null) => {
+    if (!email && !password) {
+        return false;
+    }
+
+    let promises = [];
+
+    if (email) {
+        promises.push(updateEmail(auth.currentUser, email));
+    }
+
+    if (password) {
+        promises.push(updatePassword(auth.currentUser, password));
+    }
+
+    return Promise.all(promises)
+        .catch(e => { console.log("E: ", e); return false; })
+}
+
+export { createUser, signIn, getUser, logOut, updateUser, updateUserAuth }
