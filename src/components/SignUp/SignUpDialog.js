@@ -60,12 +60,19 @@ const DialogActions = withStyles((theme) => ({
 export default function SignUpDialog({ onClose, data }) {
     const theme = createTheme();
     const classes = styles(theme);
+    const [fullName, setFullName] = React.useState();
     const [email, setEmail] = React.useState();
     const [password, setPassword] = React.useState();
     const [error, setError] = React.useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!fullName || !email || !password) {
+            setError(true);
+        }
+
+        data.fullName = fullName;
+
         createUser({ ...data, email, password })
             .then(user => {
                 if (user) {
@@ -89,11 +96,22 @@ export default function SignUpDialog({ onClose, data }) {
                         margin="normal"
                         required
                         fullWidth
+                        id="fullName"
+                        label="Full Name"
+                        name="fullName"
+                        autoComplete="fullName"
+                        autoFocus
+                        onChange={e => { setFullName(e.target.value); setError(false); }}
+                        error={error}
+                    />
+                    <TextField
+                        margin="normal"
+                        required
+                        fullWidth
                         id="ignite_email"
                         label="Email Address"
                         name="ignite_email"
                         autoComplete="ignite_email"
-                        autoFocus
                         onChange={e => { setEmail(e.target.value); setError(false); }}
                         error={error}
                     />
