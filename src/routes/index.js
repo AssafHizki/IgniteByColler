@@ -4,6 +4,7 @@ import SignIn from "../components/SignIn";
 import SignUp from "../components/SignUp/";
 import SignUpDetails from "../components/SignUp/SignUpDetails";
 import Dashboard from "../components/Dashboard/Dashboard";
+import Contacts from "../components/Dashboard/Contacts";
 import LogOut from '../components/LogOut';
 import Powers from '../components/Profile/Powers';
 import Fields from '../components/Profile/Fields';
@@ -37,6 +38,9 @@ export default function Routes() {
             </Route>
             <Route path="/dashboard">
                 <Dashboard />
+            </Route>
+            <Route path="/contacts">
+                <Contacts />
             </Route>
             <Route path="/" exact>
                 <SignIn />

@@ -3,13 +3,15 @@ import {
     signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut,
     updatePassword, updateEmail
 } from "firebase/auth";
-import { setDoc, doc, getDoc, updateDoc } from 'firebase/firestore/lite';
+import { setDoc, doc, getDoc, updateDoc, collectionGroup, getDocs } from 'firebase/firestore/lite';
+
+// For the full list of FireStore commands see:
+// https://firebase.google.com/docs/reference/js/firestore_lite
 
 const createUser = async (data) => {
     return createUserWithEmailAndPassword(auth, data.email, data.password)
         .then((userCredential) => {
             delete data.password;
-            delete data.email;
 
             return setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
                 .then(() => { return true })
@@ -51,7 +53,7 @@ const updateUser = async (props) => {
     }
 
     return updateDoc(doc(db, 'users', auth.currentUser.uid), { ...props })
-        .then(() => logOut())
+        .then(() => { return true; })
         .catch(e => { console.log("E: ", e); return false; })
 }
 
@@ -74,4 +76,21 @@ const updateUserAuth = async (email = null, password = null) => {
         .catch(e => { console.log("E: ", e); return false; })
 }
 
-export { createUser, signIn, getUser, logOut, updateUser, updateUserAuth }
+const getData = async () => {
+    let arr = [];
+
+    return getDocs(collectionGroup(db, 'users'))
+        .then(col => {
+            if (!col.empty) {
+                col.docs.forEach(userDoc => {
+                    arr.push(userDoc.data())
+                })
+            }
+            console.log(arr)
+            return arr;
+        })
+        .catch(e => { console.log("E: ", e); return false; })
+}
+
+
+export { createUser, signIn, getUser, logOut, updateUser, updateUserAuth, getData }

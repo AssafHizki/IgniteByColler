@@ -8,4 +8,6 @@ export const UserContext = React.createContext({
   uid: "UIDEXAMPLE",
   powers: ["POWER1", "POWER2"],
   fields: ["FIELD1", "FIELD2"],
+  contacts: ["USER1", "USER2"],
+  updateUser: () => console.log("updateUser")
 });

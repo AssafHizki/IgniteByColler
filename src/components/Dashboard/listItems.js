@@ -17,7 +17,7 @@ export const mainListItems = (
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
         </ListItem>
-        <ListItem button>
+        <ListItem button onClick={() => browserHistory.push("/contacts")}>
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>

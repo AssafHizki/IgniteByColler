@@ -80,6 +80,7 @@ export default function SignUpDetails(props) {
             elevatorPitch,
             powers: currSuperPowers,
             fields: currFields,
+            type
         }
         setDialog(<SignUpDialog onClose={() => setDialog()} data={data} />)
     };

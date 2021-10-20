@@ -11,23 +11,31 @@ import { UserContext } from './AuthContext';
 function App() {
   const [user, setUser] = React.useState();
 
+  const updateUser = (persistedUser) => {
+
+    getUser(persistedUser.uid).then(thisUser => {
+      if (thisUser) {
+        setUser({
+          email: persistedUser.email,
+          uid: persistedUser.uid,
+          fullName: thisUser.fullName,
+          whyJoin: thisUser.whyJoin,
+          elevatorPitch: thisUser.elevatorPitch,
+          powers: thisUser.powers,
+          fields: thisUser.fields,
+          contacts: thisUser.contacts || [],
+          updateUser
+        });
+      }
+    })
+      .catch(e => console.log("AuthError: ", e))
+
+  }
+
   React.useEffect(() => {
     var unsubscribe = onAuthStateChanged(auth, function (persistedUser) {
       if (persistedUser && persistedUser.uid) {
-        getUser(persistedUser.uid).then(thisUser => {
-          if (thisUser) {
-            setUser({
-              email: persistedUser.email,
-              uid: persistedUser.uid,
-              fullName: thisUser.fullName,
-              whyJoin: thisUser.whyJoin,
-              elevatorPitch: thisUser.elevatorPitch,
-              powers: thisUser.powers,
-              fields: thisUser.fields
-            });
-          }
-        })
-          .catch(e => console.log("AuthError: ", e))
+        updateUser(persistedUser)
       }
       else {
         setUser();

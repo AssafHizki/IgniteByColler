@@ -7,6 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { useLocation } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { updateUser } from '../../firebase/functions';
+import SuccessDialog from '../Dashboard/SuccessDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -22,7 +23,7 @@ export default function Powers(props) {
     const type = location?.state?.type;
     const [elevatorPitch, setElevatorPitch] = React.useState(user?.elevatorPitch);
     const [whyJoin, setWhyJoin] = React.useState(user?.whyJoin);
-
+    const [dialog, setDialog] = React.useState();
 
     React.useEffect(() => {
         if (!user) {
@@ -38,13 +39,15 @@ export default function Powers(props) {
 
         if (elevatorPitch && elevatorPitch.length <= 150 && whyJoin && whyJoin.length <= 150) {
             updateUser({ elevatorPitch, whyJoin })
-                .then(() => console.log("success"))
+                .then(() => setDialog(<SuccessDialog onClose={() => setDialog()} text="Success" />))
+
         }
     }
 
 
     return (
         <DrawerWithChildren >
+            {dialog}
             <form className={classes.formControl}>
                 <TextField
                     variant="outlined"

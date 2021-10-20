@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useLocation } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { updateUser } from '../../firebase/functions';
+import SuccessDialog from '../Dashboard/SuccessDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,7 @@ export default function Powers(props) {
     const user = React.useContext(UserContext);
     const location = useLocation();
     const classes = useStyles();
+    const [dialog, setDialog] = React.useState();
     const type = location?.state?.type;
 
     const [superPowers, setSuperPowers] = React.useState({
@@ -58,13 +60,16 @@ export default function Powers(props) {
             let returnValue = [];
             thisSuperPowers.forEach(s => returnValue.push(s[0] !== "other" ? s[0] : s[1]))
 
-            updateUser({ "powers": returnValue });
+            updateUser({ "powers": returnValue })
+                .then(() => setDialog(<SuccessDialog onClose={() => setDialog()} text="Success" />))
+
         }
     };
 
 
     return (
         <DrawerWithChildren >
+            {dialog}
             <FormControl required error={superPowerError} component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
                 <FormGroup >

@@ -13,6 +13,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import { useLocation } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import { updateUser } from '../../firebase/functions';
+import SuccessDialog from '../Dashboard/SuccessDialog';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -25,6 +26,8 @@ export default function Fields(props) {
     const user = React.useContext(UserContext);
     const location = useLocation();
     const classes = useStyles();
+    const [dialog, setDialog] = React.useState();
+
     const type = location?.state?.type;
 
     const [fields, setFields] = React.useState({
@@ -57,13 +60,15 @@ export default function Fields(props) {
         if (thisFields.length > 0 && thisFields.length < 4) {
             let returnValue = [];
             thisFields.forEach(s => returnValue.push(s[0] !== "other" ? s[0] : s[1]))
-            updateUser({ "fields": returnValue });
+            updateUser({ "fields": returnValue })
+                .then(() => setDialog(<SuccessDialog onClose={() => setDialog()} text="Success" />))
         }
     };
 
 
     return (
         <DrawerWithChildren >
+            {dialog}
             <FormControl required error={fieldsError} component="fieldset" className={classes.formControl}>
                 <FormLabel component="legend">{type === "single" ? "I want to join in the field of" : "Our fields are"}</FormLabel>
                 <FormGroup>

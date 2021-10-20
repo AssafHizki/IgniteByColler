@@ -6,7 +6,7 @@ import { Button } from '@mui/material';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { updateUserAuth } from '../../firebase/functions';
-
+import SuccessDialog from '../Dashboard/SuccessDialog';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -23,6 +23,7 @@ export default function Powers(props) {
     const classes = useStyles();
     const [email, setEmail] = React.useState(user?.email);
     const [password, setPassword] = React.useState();
+    const [dialog, setDialog] = React.useState();
 
     React.useEffect(() => {
         if (!user) {
@@ -35,7 +36,7 @@ export default function Powers(props) {
 
         if (email && password) {
             updateUserAuth(email, password)
-                .then((ok) => console.log("success"))
+                .then(() => setDialog(<SuccessDialog onClose={() => setDialog()} text="Success" />))
         }
     }
 
@@ -43,6 +44,7 @@ export default function Powers(props) {
     return (
         <DrawerWithChildren >
             <div>
+                {dialog}
                 <form className={classes.formControl} >
                     <TextField
                         margin="normal"

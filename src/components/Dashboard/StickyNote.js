@@ -7,6 +7,13 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import sticky_note from '../../images/sticky_note.png';
 import Dialog from '@material-ui/core/Dialog';
+import { sendMail } from '../../utils';
+import { updateUser } from '../../firebase/functions';
+import { UserContext } from '../../AuthContext';
+import SuccessDialog from './SuccessDialog';
+import { Label } from 'semantic-ui-react'
+
+const avatars = ["ade.jpg", "chris.jpg", "joe.jpg", "laura.jpg", "veronika.jpg"];
 
 const useStyles = makeStyles({
     root: {
@@ -42,8 +49,17 @@ const useStyles = makeStyles({
     },
 });
 
-function StickyNoteDialog({ elevatorPitch, whyJoin, onClose }) {
+function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     const classes = useStyles();
+    const user = React.useContext(UserContext);
+    const disabledConnection = user.contacts.find(con => con === userNote.id);
+
+    const onClick = async () => {
+        sendMail(userNote.fullName, userNote.email);
+        updateUser({ "contacts": [...user.contacts, userNote.id] })
+            .then(() => onSuccess())
+            .catch(e => console.log(e))
+    }
 
     return (
         <Dialog onClose={onClose} open>
@@ -52,24 +68,24 @@ function StickyNoteDialog({ elevatorPitch, whyJoin, onClose }) {
                     Elevator Pitch
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                    {elevatorPitch}
+                    {userNote.elevatorPitch}
                 </Typography>
                 <Typography variant="h5" component="h2" gutterBottom>
                     Why you?
                 </Typography>
                 <Typography className={classes.pos} color="textSecondary">
-                    {whyJoin}
+                    {userNote.whyJoin}
                 </Typography>
                 <CardActions>
-                    <Button size="large" color="primary" onClick={() => console.log("Connect!")}>
-                        Contact</Button>
+                    <Button size="large" color="primary" onClick={onClick} disabled={disabledConnection}>
+                        {disabledConnection ? "Already Connected" : "Contact"}</Button>
                 </CardActions>
             </CardContent>
         </Dialog>
     );
 }
 
-export default function SimpleCard({ elevatorPitch, whyJoin }) {
+export default function SimpleCard({ userNote }) {
     const classes = useStyles();
     const [dialog, setDialog] = useState();
 
@@ -77,17 +93,44 @@ export default function SimpleCard({ elevatorPitch, whyJoin }) {
         <Card className={classes.root}>
             {dialog}
             <CardContent >
-                <Typography variant="h5" component="h2" gutterBottom>
+                <Label >
+                    <img src={'https://react.semantic-ui.com/images/avatar/small/' + avatars[Math.floor(Math.random() * avatars.length)]} />
+                    {userNote.type}
+                </Label>
+                <Typography variant="h6" component="h5" >
+                    Powers
+                </Typography>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                    {userNote.powers.map(power => (
+                        <div style={{ margin: 5 }}>
+                            {power}
+                        </div>
+                    ))}
+                </div>
+                <Typography variant="h6" component="h5" >
+                    Fields
+                </Typography>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                    {userNote.fields.map(field => (
+                        <div style={{ margin: 5 }}>
+                            {field}
+                        </div>
+                    ))}
+                </div>
+                <Typography variant="h5" component="h2" gutterBottom >
                     Elevator Pitch
                 </Typography>
                 <Typography className={classes.pos} variant="body2">
-                    {elevatorPitch}
+                    {userNote.elevatorPitch}
                 </Typography>
             </CardContent>
             <CardActions>
                 <Button size="medium" color="primary" onClick={() => setDialog(
-                    <StickyNoteDialog elevatorPitch={elevatorPitch} whyJoin={whyJoin}
-                        onClose={() => setDialog()} />)}>
+                    <StickyNoteDialog userNote={userNote}
+                        onClose={() => setDialog()}
+                        onSuccess={() => setDialog(<SuccessDialog onClose={() => setDialog()}
+                            text="Success! An email was sent and you can find this new contact on your 'contacts'" />)}
+                    />)}>
                     Learn More</Button>
             </CardActions>
         </Card>
