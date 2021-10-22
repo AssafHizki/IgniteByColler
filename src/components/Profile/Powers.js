@@ -86,7 +86,7 @@ export default function Powers(props) {
                         label="Product (PM, fundraising, etc)"
                     />
                     <FormControlLabel
-                        control={<Checkbox checked={superPowers.customers} onChange={changeSuperPower} name="cusomers" />}
+                        control={<Checkbox checked={superPowers.customers} onChange={changeSuperPower} name="customers" />}
                         label="Customers (marketing, sales, distribution channels, etc)"
                     />
                     <FormControlLabel

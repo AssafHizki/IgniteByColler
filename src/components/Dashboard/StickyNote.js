@@ -11,9 +11,7 @@ import { sendMail } from '../../utils';
 import { updateUser } from '../../firebase/functions';
 import { UserContext } from '../../AuthContext';
 import SuccessDialog from './SuccessDialog';
-import { Label } from 'semantic-ui-react'
-
-const avatars = ["ade.jpg", "chris.jpg", "joe.jpg", "laura.jpg", "veronika.jpg"];
+import { RibbonContainer, LeftCornerRibbon } from "react-ribbons";
 
 const useStyles = makeStyles({
     root: {
@@ -92,47 +90,49 @@ export default function SimpleCard({ userNote }) {
     return (
         <Card className={classes.root}>
             {dialog}
-            <CardContent >
-                <Label >
-                    <img src={'https://react.semantic-ui.com/images/avatar/small/' + avatars[Math.floor(Math.random() * avatars.length)]} />
-                    {userNote.type}
-                </Label>
-                <Typography variant="h6" component="h5" >
-                    Powers
-                </Typography>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                    {userNote.powers.map(power => (
-                        <div style={{ margin: 5 }}>
-                            {power}
-                        </div>
-                    ))}
-                </div>
-                <Typography variant="h6" component="h5" >
-                    Fields
-                </Typography>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                    {userNote.fields.map(field => (
-                        <div style={{ margin: 5 }}>
-                            {field}
-                        </div>
-                    ))}
-                </div>
-                <Typography variant="h5" component="h2" gutterBottom >
-                    Elevator Pitch
-                </Typography>
-                <Typography className={classes.pos} variant="body2">
-                    {userNote.elevatorPitch}
-                </Typography>
-            </CardContent>
-            <CardActions>
-                <Button size="medium" color="primary" onClick={() => setDialog(
-                    <StickyNoteDialog userNote={userNote}
-                        onClose={() => setDialog()}
-                        onSuccess={() => setDialog(<SuccessDialog onClose={() => setDialog()}
-                            text="Success! An email was sent and you can find this new contact on your 'contacts'" />)}
-                    />)}>
-                    Learn More</Button>
-            </CardActions>
+            <RibbonContainer className="custom-class">
+                <LeftCornerRibbon backgroundColor="#0088ff" color="#f0f0f0" fontFamily="Arial">
+                    {userNote.type === "team" ? "Team" : "Igniter"}
+                </LeftCornerRibbon>
+                <CardContent >
+                    <Typography variant="h6" component="h5" >
+                        Powers
+                    </Typography>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                        {userNote.powers.map(power => (
+                            <div style={{ margin: 5 }}>
+                                {power}
+                            </div>
+                        ))}
+                    </div>
+                    <Typography variant="h6" component="h5" >
+                        Fields
+                    </Typography>
+                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                        {userNote.fields.map(field => (
+                            <div style={{ margin: 5 }}>
+                                {field}
+                            </div>
+                        ))}
+                    </div>
+                    <Typography variant="h5" component="h2" gutterBottom >
+                        Elevator Pitch
+                    </Typography>
+                    <Typography className={classes.pos} variant="body2">
+                        {userNote.elevatorPitch}
+                    </Typography>
+                </CardContent>
+                <CardActions>
+                    <Button size="medium" color="primary" onClick={() => setDialog(
+                        <StickyNoteDialog userNote={userNote}
+                            onClose={() => setDialog()}
+                            onSuccess={() => setDialog(<SuccessDialog onClose={() => setDialog()}
+                                text="Success! An email was sent and you can find this new contact on your 'contacts'" />)}
+                        />)}>
+                        Learn More</Button>
+                </CardActions>
+            </RibbonContainer>
         </Card>
+
     );
 }
