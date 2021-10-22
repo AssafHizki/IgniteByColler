@@ -7,8 +7,13 @@ import { getUser } from './firebase/functions';
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from './firebase';
 import { UserContext } from './AuthContext';
+import WithClearCache from "./ClearCache";
 
 function App() {
+  return <WithClearCache Component={MainApp} />;
+}
+
+function MainApp() {
   const [user, setUser] = React.useState();
 
   const updateUser = (persistedUser) => {
