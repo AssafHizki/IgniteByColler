@@ -93,14 +93,14 @@ export default function SignIn() {
                 >
                     Sign In
                 </Button>
-                <Grid container>
-                    <Grid item xs>
-                        <Link component="button" variant="body2" onClick={handleResetPassword}>
+                <Grid container >
+                    <Grid item xs={5}>
+                        <Link component="button" variant="body2" onClick={handleResetPassword} >
                             Forgot password?
                         </Link>
                     </Grid>
-                    <Grid item>
-                        <Link href="signup" variant="body2">
+                    <Grid item xs>
+                        <Link href="signup" variant="body2" >
                             Don't have an account? Sign Up
                         </Link>
                     </Grid>
