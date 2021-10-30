@@ -6,7 +6,7 @@ import Grid from '@mui/material/Grid';
 import { GeneralDesign } from './utils';
 import { makeStyles } from '@material-ui/core/styles';
 import browserHistory from '../routes/history';
-import { signIn } from '../firebase/functions';
+import { signIn, resetPassword } from '../firebase/functions';
 import { UserContext } from '../AuthContext';
 
 const useStyles = makeStyles((theme) => ({
@@ -39,6 +39,23 @@ export default function SignIn() {
             })
             .catch(e => console.log("error: ", e))
     };
+
+    const handleResetPassword = async (e) => {
+        e.preventDefault();
+
+        if (!email) {
+            return setError(true)
+        }
+
+        resetPassword(email).then(ok => {
+            if (ok) {
+                alert(`A reset password email was sent to ${email}`)
+            }
+            else {
+                alert(`Couldn't send a reset password email to ${email}`);
+            }
+        })
+    }
 
     return (
         <GeneralDesign title="Sign In">
@@ -78,7 +95,7 @@ export default function SignIn() {
                 </Button>
                 <Grid container>
                     <Grid item xs>
-                        <Link href="signup" variant="body2">
+                        <Link component="button" variant="body2" onClick={handleResetPassword}>
                             Forgot password?
                         </Link>
                     </Grid>

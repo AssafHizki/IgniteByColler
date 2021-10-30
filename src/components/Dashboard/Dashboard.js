@@ -2,9 +2,16 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import DrawerWithChildren from './Drawer';
 import StickyNote from './StickyNote';
-import browserHistory from '../../routes/history';
 import { UserContext } from '../../AuthContext';
 import { getData } from '../../firebase/functions';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
+
+const getParams = (str) => {
+    const current_url = new URL(window.location.href);
+    const search_params = current_url.searchParams;
+    return search_params.get(str);
+}
 
 export default function Dashboard(props) {
 
@@ -12,13 +19,9 @@ export default function Dashboard(props) {
     const [users, setUsers] = React.useState([]);
     const [displayUsers, setDisplayUsers] = React.useState([]);
     const [radioButtons, setRadioButtons] = React.useState({ showTeams: true, showPlayers: true });
-
+    const openNoteID = getParams("ni");
 
     React.useEffect(() => {
-        if (!user) {
-            browserHistory.push("/");
-        }
-
         async function _getData() {
             getData().then(usersData => { setUsers(usersData); setDisplayUsers(usersData) })
                 .catch(e => console.log(e))
@@ -30,11 +33,11 @@ export default function Dashboard(props) {
 
     }, [user])
 
-    const handleClick = async (e) => {
+    const handleFilterChange = async (type) => {
         let filterPlayers = !radioButtons.showPlayers;
         let filterTeams = !radioButtons.showTeams;
 
-        if (e.target.name === "showPlayers") {
+        if (type === "showPlayers") {
             filterPlayers = radioButtons.showPlayers;
             setRadioButtons({ ...radioButtons, showPlayers: !radioButtons.showPlayers });
         }
@@ -59,15 +62,22 @@ export default function Dashboard(props) {
 
     return (
         <DrawerWithChildren >
-            <Grid container key="RadioButtons">
-                <input type="radio" name="showPlayers" checked={radioButtons.showPlayers} onClick={handleClick} /> Show players looking for a team
-                <input type="radio" name="showTeams" checked={radioButtons.showTeams} onClick={handleClick} /> Show teams looking for players
+            <Grid container key="RadioButtons" style={{ margin: 10, padding: 5 }}>
+                <FormControlLabel
+                    control={<Checkbox checked={radioButtons.showPlayers} color="primary" onClick={() => { handleFilterChange("showPlayers") }} />}
+                    label="Show co-founders looking to join a Venture team"
+                    style={{ marginRight: 25 }}
+                />
+                <FormControlLabel
+                    control={<Checkbox checked={radioButtons.showTeams} color="primary" onClick={() => { handleFilterChange("showTeams") }} />}
+                    label="Show Venture teams looking for co-founders"
+                />
             </Grid>
 
             {displayUsers.map((userNote, index) => {
                 return (
                     <Grid item xs={12} md={4} lg={3} key={index}>
-                        <StickyNote userNote={userNote} />
+                        <StickyNote userNote={userNote} openDialog={userNote.id === openNoteID} />
                     </Grid>
                 )
             })}

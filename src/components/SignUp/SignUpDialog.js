@@ -64,11 +64,17 @@ export default function SignUpDialog({ onClose, data }) {
     const [email, setEmail] = React.useState();
     const [password, setPassword] = React.useState();
     const [error, setError] = React.useState(false);
+    const [privacyAgreement, setPrivacyAgreement] = React.useState(false);
+    const [privacyAgreementError, setPrivacyAgreementError] = React.useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!fullName || !email || !password) {
-            setError(true);
+            return setError(true);
+        }
+
+        if (!privacyAgreement) {
+            return setPrivacyAgreementError(true);
         }
 
         data.fullName = fullName;
@@ -82,7 +88,7 @@ export default function SignUpDialog({ onClose, data }) {
                     setError(true);
                 }
             })
-            .catch(e => { console.log("E: ", e); setError(true); })
+            .catch(e => { console.log("E: ", e); setError(true); alert(e) })
     }
 
     return (
@@ -102,7 +108,6 @@ export default function SignUpDialog({ onClose, data }) {
                         autoComplete="fullName"
                         autoFocus
                         onChange={e => { setFullName(e.target.value); setError(false); }}
-                        error={error}
                     />
                     <TextField
                         margin="normal"
@@ -129,9 +134,13 @@ export default function SignUpDialog({ onClose, data }) {
                         error={error}
                     />
                     <FormControlLabel
-                        control={<Checkbox value="remember" color="primary" />}
+                        control={<Checkbox checked={privacyAgreement} color="primary" onClick={() => { setPrivacyAgreement(!privacyAgreement); setPrivacyAgreementError(privacyAgreement) }} />}
                         label="I have read and agreed to the terms and conditions"
                     />
+                    {
+                        privacyAgreementError &&
+                        <p style={{ color: 'red' }}>You must read and agree to the terms and conditions</p>
+                    }
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <Button
                             type="submit"

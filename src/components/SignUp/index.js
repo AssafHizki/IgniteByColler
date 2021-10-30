@@ -1,41 +1,43 @@
 import * as React from 'react';
 import Link from '@mui/material/Link';
-import Grid from '@mui/material/Grid';
 import { GeneralDesign } from '../utils';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import browserHistory from '../../routes/history';
 
 const defaultProps = {
     bgcolor: 'background.paper',
-    m: 2,
+    ml: 3,
+    mr: 3,
     borderColor: 'text.primary',
     border: 1,
     padding: 2,
+    display: "flex",
+    flex: 1,
+    justifyContent: 'center'
 };
 
 export default function SignUp() {
     return (
         <GeneralDesign title="I Want to">
-            <div style={{ display: 'flex', flexDirection: 'row' }}>
-                <Box  {...defaultProps} component="button" onClick={() => browserHistory.push({ pathname: "/signup/details", state: { type: 'single' } })}>
-                    Join a team with an idea
+            <div style={{ display: 'flex', flexDirection: 'row', marginTop: 10 }}>
+                <Box  {...defaultProps} >
+                    <Button onClick={() => browserHistory.push({ pathname: "/signup/details", state: { type: 'single' } })}>
+                        Join a startup
+                    </Button>
                 </Box>
-                <Box  {...defaultProps} component="button" onClick={() => browserHistory.push({ pathname: "/signup/details", state: { type: 'team' } })}>
-                    Join partners to my team
+                <Box  {...defaultProps} >
+                    <Button onClick={() => browserHistory.push({ pathname: "/signup/details", state: { type: 'team' } })}>
+                        Invite Co-Founders to my Venture
+                    </Button>
                 </Box>
             </div>
-            <Grid container>
-                <Grid item xs>
-                    <Link href="signin" variant="body2">
-                        Contact us
-                    </Link>
-                </Grid>
-                <Grid item>
-                    <Link href="signin" variant="body2">
-                        Have an account? Sign In
-                    </Link>
-                </Grid>
-            </Grid>
+
+
+            <Link href="signin" variant="body2" sx={{ marginTop: 5 }}>
+                Have an account? Sign In
+            </Link>
+
         </GeneralDesign >
     );
 }

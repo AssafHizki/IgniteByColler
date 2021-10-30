@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
@@ -53,7 +53,7 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     const disabledConnection = user.contacts.find(con => con === userNote.id);
 
     const onClick = async () => {
-        sendMail(userNote.fullName, userNote.email);
+        sendMail(userNote.fullName, userNote.email, userNote.id);
         updateUser({ "contacts": [...user.contacts, userNote.id] })
             .then(() => onSuccess())
             .catch(e => console.log(e))
@@ -83,12 +83,27 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     );
 }
 
-export default function SimpleCard({ userNote }) {
+export default function SimpleCard({ userNote, openDialog = false }) {
     const classes = useStyles();
     const [dialog, setDialog] = useState();
 
+    const openNoteDialog = () => {
+        setDialog(
+            <StickyNoteDialog userNote={userNote}
+                onClose={() => setDialog()}
+                onSuccess={() => setDialog(<SuccessDialog onClose={() => setDialog()}
+                    text="AWESOME! We just sent an email to this contact. We'll get back to you as soon as something happens. Meanwhile, check 'Contacts' for you new contact" />)}
+            />)
+    }
+
+    useEffect(() => {
+        if (openDialog) {
+            openNoteDialog();
+        }
+    }, [])
+
     return (
-        <Card className={classes.root}>
+        <Card className={classes.root} >
             {dialog}
             <RibbonContainer className="custom-class">
                 <LeftCornerRibbon backgroundColor="#0088ff" color="#f0f0f0" fontFamily="Arial">
@@ -99,8 +114,8 @@ export default function SimpleCard({ userNote }) {
                         Powers
                     </Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                        {userNote.powers.map(power => (
-                            <div style={{ margin: 5 }}>
+                        {userNote.powers.map((power, index) => (
+                            <div style={{ margin: 5 }} key={"Power" + index}>
                                 {power}
                             </div>
                         ))}
@@ -109,8 +124,8 @@ export default function SimpleCard({ userNote }) {
                         Fields
                     </Typography>
                     <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                        {userNote.fields.map(field => (
-                            <div style={{ margin: 5 }}>
+                        {userNote.fields.map((field, index) => (
+                            <div style={{ margin: 5 }} key={"Field" + index}>
                                 {field}
                             </div>
                         ))}
@@ -123,12 +138,7 @@ export default function SimpleCard({ userNote }) {
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    <Button size="medium" color="primary" onClick={() => setDialog(
-                        <StickyNoteDialog userNote={userNote}
-                            onClose={() => setDialog()}
-                            onSuccess={() => setDialog(<SuccessDialog onClose={() => setDialog()}
-                                text="Success! An email was sent and you can find this new contact on your 'contacts'" />)}
-                        />)}>
+                    <Button size="medium" color="primary" onClick={() => openNoteDialog()}>
                         Learn More</Button>
                 </CardActions>
             </RibbonContainer>

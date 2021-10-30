@@ -71,7 +71,7 @@ export default function Powers(props) {
         <DrawerWithChildren >
             {dialog}
             <FormControl required error={superPowerError} component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
+                <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
                 <FormGroup >
                     <FormControlLabel
                         control={<Checkbox checked={superPowers.managment} onChange={changeSuperPower} name="managment" />}
@@ -103,7 +103,7 @@ export default function Powers(props) {
                     />
                 </FormGroup>
                 <FormHelperText>You can choose up to two options</FormHelperText>
-                <Button onClick={handleSubmit} type="submit" >Update</Button>
+                <Button onClick={handleSubmit} type="submit" style={{ marginTop: 10, alignSelf: "start" }}>Update</Button>
             </FormControl>
         </DrawerWithChildren>
     );

@@ -1,7 +1,7 @@
 import { db, auth } from './index';
 import {
     signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut,
-    updatePassword, updateEmail
+    updatePassword, updateEmail, sendPasswordResetEmail, sendEmailVerification
 } from "firebase/auth";
 import { setDoc, doc, getDoc, updateDoc, collectionGroup, getDocs } from 'firebase/firestore/lite';
 
@@ -14,20 +14,37 @@ const createUser = async (data) => {
             delete data.password;
 
             return setDoc(doc(db, 'users', userCredential.user.uid), { ...data, id: userCredential.user.uid })
-                .then(() => { return true })
+                .then(() => {
+                    sendEmailVerification(auth.currentUser);
+                    auth.signOut();
+                    return true
+                })
         })
-        .catch((error) => {
-            console.log("err: ", error.message);
-            return false;
-        });
 }
 
 const signIn = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
+            if (!userCredential.emailVerified) {
+                sendEmailVerification(auth.currentUser);
+                return false;
+            }
             return getUser(userCredential.user.uid)
         })
         .catch(e => { console.log("Error: ", e); return false })
+}
+
+const resetPassword = async (email) => {
+    if (!email) {
+        return false;
+    }
+
+    return sendPasswordResetEmail(auth, email)
+        .then(() => { return true })
+        .catch(error => {
+            console.log(error)
+            return false;
+        })
 }
 
 const logOut = async () => {
@@ -93,4 +110,4 @@ const getData = async () => {
 }
 
 
-export { createUser, signIn, getUser, logOut, updateUser, updateUserAuth, getData }
+export { createUser, signIn, resetPassword, getUser, logOut, updateUser, updateUserAuth, getData }

@@ -79,7 +79,7 @@ export default function Powers(props) {
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault() } }}
                     multiline
                 />
-                <Button onClick={handleSubmit} type="submit" >Update</Button>
+                <Button onClick={handleSubmit} type="submit" style={{ marginTop: 10, alignSelf: "start" }}>Update</Button>
             </form >
 
         </DrawerWithChildren>

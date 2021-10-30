@@ -39,7 +39,7 @@ function MainApp() {
 
   React.useEffect(() => {
     var unsubscribe = onAuthStateChanged(auth, function (persistedUser) {
-      if (persistedUser && persistedUser.uid) {
+      if (persistedUser && persistedUser.emailVerified && persistedUser.uid) {
         updateUser(persistedUser)
       }
       else {

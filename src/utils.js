@@ -1,11 +1,12 @@
 
 import emailjs from 'emailjs-com';
 
-const sendMail = async (fullName, email) => {
+const sendMail = async (fullName, email, id) => {
 
     var templateParams = {
         name: fullName,
         email: email,
+        id: id,
     };
 
     console.log(`sending to: `, templateParams)

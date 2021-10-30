@@ -126,7 +126,10 @@ export default function DrawerWithChildren(props) {
                                 location.pathname === "/personaldetails" ?
                                     "Personal Details"
                                     :
-                                    location.pathname[1].toUpperCase() + location.pathname.slice(2, location.pathname.length)}
+                                    location.pathname === "/dashboard" ?
+                                        "CO-FOUNDERS DASHBOARD"
+                                        :
+                                        location.pathname[1].toUpperCase() + location.pathname.slice(2, location.pathname.length)}
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -156,7 +159,6 @@ export default function DrawerWithChildren(props) {
                     <Divider />
                     <List>{secondaryListItems}</List>
                     <ListSubheader inset >
-                        <Copyright sx={{ pt: 4 }} />
                         <Avatar variant="square" className={classes.logo} src={logo} />
                     </ListSubheader>
                 </Drawer>

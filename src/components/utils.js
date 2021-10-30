@@ -11,7 +11,14 @@ function Copyright(props) {
                 Ignite
             </Link>{' '}
             {new Date().getFullYear()}
-            {'.'}
+            {' | '}
+            <Link color="inherit" href="mailto:coller.ignite@gmail.com">
+                Contact us
+            </Link>
+            {' | '}
+            <Link target="_blank" color="inherit" href="https://chat.whatsapp.com/EW4diqDZtxtFS9UcYunAXF">
+                WhatsApp
+            </Link>
         </Typography>
     );
 }

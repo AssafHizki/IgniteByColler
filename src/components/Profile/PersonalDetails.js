@@ -71,7 +71,7 @@ export default function Powers(props) {
                         helperText={error && "Password should be at least 6 characters or email is taken"}
                         error={error}
                     />
-                    <Button onClick={handleSubmit} type="submit" >Update</Button>
+                    <Button onClick={handleSubmit} type="submit" style={{ marginTop: 20, alignSelf: "start" }}>Update</Button>
 
                 </form >
                 <Button onClick={() => console.log("delete")} color="error" className={classes.delete}>Delete Account</Button>

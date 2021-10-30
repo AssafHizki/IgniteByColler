@@ -70,7 +70,7 @@ export default function Fields(props) {
         <DrawerWithChildren >
             {dialog}
             <FormControl required error={fieldsError} component="fieldset" className={classes.formControl}>
-                <FormLabel component="legend">{type === "single" ? "I want to join in the field of" : "Our fields are"}</FormLabel>
+                <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "I want to join in the field of" : "Our fields are"}</FormLabel>
                 <FormGroup>
                     <FormControlLabel
                         control={<Checkbox checked={fields.foodtech} onChange={changeField} name="foodtech" />}
@@ -101,7 +101,7 @@ export default function Fields(props) {
                     />
                 </FormGroup>
                 <FormHelperText>You can choose up to three options</FormHelperText>
-                <Button onClick={handleSubmit} type="submit" >Update</Button>
+                <Button onClick={handleSubmit} type="submit" style={{ marginTop: 10, alignSelf: "start" }}>Update</Button>
             </FormControl>
         </DrawerWithChildren>
     );

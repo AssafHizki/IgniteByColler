@@ -5,7 +5,10 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
-import AssignmentIcon from '@mui/icons-material/Assignment';
+import PowerIcon from '@mui/icons-material/SupervisorAccount';
+import FieldIcon from '@mui/icons-material/Assignment';
+import PitchIcon from '@mui/icons-material/Speaker';
+import DetailsIcon from '@mui/icons-material/Person';
 import LogOutIcon from '@mui/icons-material/Logout';
 import browserHistory from '../../routes/history';
 
@@ -31,25 +34,25 @@ export const secondaryListItems = (
         <ListSubheader inset>My Profile</ListSubheader>
         <ListItem button onClick={() => browserHistory.push("/powers")}>
             <ListItemIcon>
-                <AssignmentIcon />
+                <PowerIcon />
             </ListItemIcon>
             <ListItemText primary="Powers" />
         </ListItem>
         <ListItem button onClick={() => browserHistory.push("/fields")}>
             <ListItemIcon>
-                <AssignmentIcon />
+                <FieldIcon />
             </ListItemIcon>
             <ListItemText primary="Fields" />
         </ListItem>
         <ListItem button onClick={() => browserHistory.push("/pitch")}>
             <ListItemIcon>
-                <AssignmentIcon />
+                <PitchIcon />
             </ListItemIcon>
             <ListItemText primary="Pitch" />
         </ListItem>
         <ListItem button onClick={() => browserHistory.push("/personaldetails")}>
             <ListItemIcon>
-                <AssignmentIcon />
+                <DetailsIcon />
             </ListItemIcon>
             <ListItemText primary="Personal Details" />
         </ListItem>

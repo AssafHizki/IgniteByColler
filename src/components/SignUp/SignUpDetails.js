@@ -20,7 +20,8 @@ const useStyles = makeStyles((theme) => ({
     },
     formControl: {
         margin: theme.spacing(3),
-        alignSelf: 'flex-start'
+        alignSelf: 'start',
+        justifyContent: 'start'
     },
 }));
 
@@ -42,6 +43,10 @@ export default function SignUpDetails(props) {
         fintech: false,
         cyber: false,
         industry: false,
+        enviromental: false,
+        eCommerce: false,
+        hls: false,
+        edutech: false,
         other: ''
     })
     const [whyJoin, setWhyJoin] = React.useState('');
@@ -93,7 +98,7 @@ export default function SignUpDetails(props) {
                     dialog
                 }
                 <FormControl required error={superPowerError} component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
+                    <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
                     <FormGroup>
                         <FormControlLabel
                             control={<Checkbox checked={superPowers.managment} onChange={changeSuperPower} name="managment" />}
@@ -105,7 +110,7 @@ export default function SignUpDetails(props) {
                         />
                         <FormControlLabel
                             control={<Checkbox checked={superPowers.product} onChange={changeSuperPower} name="product" />}
-                            label="Product (PM, fundraising, etc)"
+                            label="Product (PM, Onboarding, UX, etc)"
                         />
                         <FormControlLabel
                             control={<Checkbox checked={superPowers.customers} onChange={changeSuperPower} name="customers" />}
@@ -126,7 +131,7 @@ export default function SignUpDetails(props) {
                     <FormHelperText>You can choose up to two options</FormHelperText>
                 </FormControl>
                 <FormControl required error={fieldsError} component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">{type === "single" ? "I want to join in the field of" : "Our fields are"}</FormLabel>
+                    <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "I want to join a venture in the field of" : "Our fields are"}</FormLabel>
                     <FormGroup>
                         <FormControlLabel
                             control={<Checkbox checked={fields.foodtech} onChange={changeField} name="foodtech" />}
@@ -144,6 +149,23 @@ export default function SignUpDetails(props) {
                             control={<Checkbox checked={fields.industry} onChange={changeField} name="industry" />}
                             label="Industry 4.1"
                         />
+                        <FormControlLabel
+                            control={<Checkbox checked={fields.enviromental} onChange={changeField} name="enviromental" />}
+                            label="CleanTech / enviromental"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={fields.eCommerce} onChange={changeField} name="eCommerce" />}
+                            label="e-commerce / Retail"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={fields.hls} onChange={changeField} name="hls" />}
+                            label="Defense / HLS"
+                        />
+                        <FormControlLabel
+                            control={<Checkbox checked={fields.edutech} onChange={changeField} name="edutech" />}
+                            label="Edutech"
+                        />
+
                         <FormControlLabel
                             control={
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
@@ -165,7 +187,7 @@ export default function SignUpDetails(props) {
                         required
                         fullWidth
                         id="elevator_pitch"
-                        label={type === "single" ? "Describe yourself" : "Describe your project (elevator pitch)"}
+                        label={type === "single" ? "Introduce yourself to the team" : "Describe your project (elevator pitch)"}
                         autoComplete="elevator_pitch"
                         onChange={e => setElevatorPitch(e.target.value)}
                         value={elevatorPitch}
