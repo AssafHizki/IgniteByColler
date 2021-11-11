@@ -5,21 +5,25 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import sticky_note from '../../images/sticky_note.png';
 import Dialog from '@material-ui/core/Dialog';
 import { sendMail } from '../../utils';
 import { updateUser } from '../../firebase/functions';
 import { UserContext } from '../../AuthContext';
 import SuccessDialog from './SuccessDialog';
-import { RibbonContainer, LeftCornerRibbon } from "react-ribbons";
+import { RibbonContainer, RightCornerRibbon } from "react-ribbons";
+import { Colors } from '../common/Constants';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
 
 const useStyles = makeStyles({
     root: {
         minWidth: 275,
-        backgroundImage: `url(${sticky_note})`,
-        backgroundSize: 'cover',
-        backgroundRepeat: 'no-repeat',
-        backgroundColor: 'transparent',
+        backgroundColor: 'white',
+        boxShadow: 'none'
+    },
+    rootDialog: {
+        minWidth: '30vw',
+        backgroundColor: 'white',
         boxShadow: 'none'
     },
     bullet: {
@@ -28,7 +32,8 @@ const useStyles = makeStyles({
         transform: 'scale(0.8)',
     },
     title: {
-        fontSize: 14,
+        fontSize: 18,
+        fontWeight: 'bold',
     },
     pos: {
         marginBottom: 12,
@@ -38,6 +43,13 @@ const useStyles = makeStyles({
         minWidth: 200,
         minHeight: 360,
         zIndex: 3,
+    },
+    ribbon: {
+        minWidth: 200,
+        minHeight: 300,
+        fontSize: 20,
+        fontWeight: 'bold',
+        margin: 10
     },
     content: {
         position: 'absolute',
@@ -61,24 +73,51 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
 
     return (
         <Dialog onClose={onClose} open>
-            <CardContent className={classes.root}>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    Elevator Pitch
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                    {userNote.elevatorPitch}
-                </Typography>
-                <Typography variant="h5" component="h2" gutterBottom>
-                    Why you?
-                </Typography>
-                <Typography className={classes.pos} color="textSecondary">
-                    {userNote.whyJoin}
-                </Typography>
-                <CardActions>
-                    <Button size="large" color="primary" onClick={onClick} disabled={disabledConnection}>
-                        {disabledConnection ? "Already Connected" : "Contact"}</Button>
-                </CardActions>
-            </CardContent>
+            <RibbonContainer className={classes.ribbon}>
+                <CardContent className={classes.rootDialog}>
+                    <RightCornerRibbon backgroundColor={userNote.type === "team" ? Colors.Purple : Colors.Gold}
+                        color={userNote.type === "team" ? '#ffff' : "black"} fontFamily="Arial"
+                    >
+                        {userNote.type === "team" ? "TEAM" : "IGNITER"}
+                    </RightCornerRibbon>
+                    <Typography variant="h5" style={{ fontWeight: 'bold' }} gutterBottom>
+                        MEET {user.fullName.split(' ')[0]}
+                    </Typography>
+                    <Divider />
+                    <Typography variant="body1" style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                        Skills {userNote.powers.map((power, index) => (
+                            power && power.length > 0 &&
+                            <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"Power" + index}>
+                                <Chip label={power} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                            </div>
+                        ))}
+                    </Typography>
+                    <Typography variant="body1" style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                        Verticals {userNote.fields.map((field, index) => (
+                            field && field.length > 0 &&
+                            <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"field" + index}>
+                                <Chip label={field} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                            </div>
+                        ))}
+                    </Typography>
+                    <Typography variant="h5" style={{ fontWeight: 'bold', marginTop: 20 }}>
+                        About me
+                    </Typography>
+                    <Typography color="body2" gutterBottom>
+                        {userNote.elevatorPitch}
+                    </Typography>
+                    <Typography variant="h5" style={{ fontWeight: 'bold', marginTop: 20 }} >
+                        What's unique about you
+                    </Typography>
+                    <Typography color="body2" gutterBottom>
+                        {userNote.whyJoin}
+                    </Typography>
+                </CardContent>
+
+                <Button size="medium" style={{ backgroundColor: Colors.ButtonBackground, color: 'white' }}
+                    onClick={onClick} disabled={disabledConnection}>
+                    {disabledConnection ? "Already Connected" : `CONTACT ${userNote.fullName.split(' ')[0]}`}</Button>
+            </RibbonContainer>
         </Dialog>
     );
 }
@@ -104,45 +143,57 @@ export default function SimpleCard({ userNote, openDialog = false }) {
 
     return (
         <Card className={classes.root} >
-            {dialog}
-            <RibbonContainer className="custom-class">
-                <LeftCornerRibbon backgroundColor="#0088ff" color="#f0f0f0" fontFamily="Arial">
-                    {userNote.type === "team" ? "Team" : "Igniter"}
-                </LeftCornerRibbon>
+            <RibbonContainer className={classes.ribbon}>
+                {dialog}
+                <RightCornerRibbon backgroundColor={userNote.type === "team" ? Colors.Purple : Colors.Gold}
+                    color={userNote.type === "team" ? '#ffff' : "black"} fontFamily="Arial"
+                >
+                    {userNote.type === "team" ? "TEAM" : "IGNITER"}
+                </RightCornerRibbon>
                 <CardContent >
-                    <Typography variant="h6" component="h5" >
-                        Powers
-                    </Typography>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                        {userNote.powers.map((power, index) => (
-                            <div style={{ margin: 5 }} key={"Power" + index}>
-                                {power}
+                    {
+                        userNote.powers.length > 0 &&
+                        <div>
+                            <Typography variant="h6" style={{ fontWeight: 'bold' }} >
+                                SKILLS
+                            </Typography>
+                            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                                {userNote.powers.map((power, index) => (
+                                    power && power.length > 0 &&
+                                    <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"Power" + index}>
+                                        <Chip label={power} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <Typography variant="h6" component="h5" >
-                        Fields
-                    </Typography>
-                    <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
-                        {userNote.fields.map((field, index) => (
-                            <div style={{ margin: 5 }} key={"Field" + index}>
-                                {field}
+                        </div>
+                    }
+                    {
+                        userNote.fields.length > 0 &&
+                        <div>
+                            <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} >
+                                VERTICALS
+                            </Typography>
+                            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
+                                {userNote.fields.map((field, index) => (
+                                    <div style={{ margin: 5 }} key={"Field" + index}>
+                                        <Chip label={field} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                                    </div>
+                                ))}
                             </div>
-                        ))}
-                    </div>
-                    <Typography variant="h5" component="h2" gutterBottom >
-                        Elevator Pitch
+                        </div>
+                    }
+                    <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} gutterBottom >
+                        ABOUT
                     </Typography>
-                    <Typography className={classes.pos} variant="body2">
+                    <Typography style={{ color: 'GrayText', textAlign: 'left' }} variant="body2">
                         {userNote.elevatorPitch}
                     </Typography>
                 </CardContent>
-                <CardActions>
-                    <Button size="medium" color="primary" onClick={() => openNoteDialog()}>
-                        Learn More</Button>
-                </CardActions>
+                <Button size="medium" style={{ color: "white", justifyContent: 'center', backgroundColor: Colors.ButtonBackground }}
+                    onClick={() => openNoteDialog()}>
+                    MORE</Button>
             </RibbonContainer>
-        </Card>
+        </Card >
 
     );
 }

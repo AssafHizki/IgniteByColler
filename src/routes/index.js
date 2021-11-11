@@ -45,10 +45,10 @@ export default function Routes() {
             <Route path="/" exact>
                 <SignIn />
             </Route>
-            <Route path="/powers" exact>
+            <Route path="/skills" exact>
                 <Powers />
             </Route>
-            <Route path="/fields" exact>
+            <Route path="/verticals" exact>
                 <Fields />
             </Route>
             <Route path="/pitch" exact>

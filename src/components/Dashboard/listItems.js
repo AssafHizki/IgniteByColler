@@ -5,9 +5,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
-import PowerIcon from '@mui/icons-material/SupervisorAccount';
-import FieldIcon from '@mui/icons-material/Assignment';
-import PitchIcon from '@mui/icons-material/Speaker';
+import SkillsIcon from '@mui/icons-material/Adb';
+import VerticalsIcon from '@mui/icons-material/CheckBox';
+import PitchIcon from '@mui/icons-material/Mic';
 import DetailsIcon from '@mui/icons-material/Person';
 import LogOutIcon from '@mui/icons-material/Logout';
 import browserHistory from '../../routes/history';
@@ -24,25 +24,25 @@ export const mainListItems = (
             <ListItemIcon>
                 <PeopleIcon />
             </ListItemIcon>
-            <ListItemText primary="Contacts" />
+            <ListItemText primary="My Contacts" />
         </ListItem>
     </div>
 );
 
 export const secondaryListItems = (
     <div>
-        <ListSubheader inset>My Profile</ListSubheader>
-        <ListItem button onClick={() => browserHistory.push("/powers")}>
+        <ListSubheader inset style={{ textAlign: 'start ' }}>My Profile</ListSubheader>
+        <ListItem button onClick={() => browserHistory.push("/skills")}>
             <ListItemIcon>
-                <PowerIcon />
+                <SkillsIcon />
             </ListItemIcon>
-            <ListItemText primary="Powers" />
+            <ListItemText primary="Skills" />
         </ListItem>
-        <ListItem button onClick={() => browserHistory.push("/fields")}>
+        <ListItem button onClick={() => browserHistory.push("/verticals")}>
             <ListItemIcon>
-                <FieldIcon />
+                <VerticalsIcon />
             </ListItemIcon>
-            <ListItemText primary="Fields" />
+            <ListItemText primary="Verticals" />
         </ListItem>
         <ListItem button onClick={() => browserHistory.push("/pitch")}>
             <ListItemIcon>
@@ -54,7 +54,7 @@ export const secondaryListItems = (
             <ListItemIcon>
                 <DetailsIcon />
             </ListItemIcon>
-            <ListItemText primary="Personal Details" />
+            <ListItemText primary="My Account" />
         </ListItem>
         <ListItem button onClick={() => browserHistory.push("/logout")}>
             <ListItemIcon>

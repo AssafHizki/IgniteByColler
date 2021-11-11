@@ -22,6 +22,7 @@ import logo from '../../images/logo.png';
 import ListSubheader from '@mui/material/ListSubheader';
 import { UserContext } from '../../AuthContext';
 import { useLocation } from "react-router-dom";
+import { Colors } from '../common/Constants';
 
 const drawerWidth = 240;
 
@@ -101,6 +102,7 @@ export default function DrawerWithChildren(props) {
                     <Toolbar
                         sx={{
                             pr: '24px', // keep right padding when drawer closed
+                            backgroundColor: (location.pathname === "/dashboard" || location.pathname === "/contacts") && Colors.Gold
                         }}
                     >
                         <IconButton
@@ -139,7 +141,8 @@ export default function DrawerWithChildren(props) {
                             {user && user.fullName && user.fullName.at(0).toLocaleUpperCase()}{user && user.fullName.split(' ')[1]?.at(0).toLocaleUpperCase()}
                         </Avatar>
                         <Typography>
-                            {user && user.fullName}
+                            {'Hello  '}
+                            {user && user.fullName.split(' ')[0]}
                         </Typography>
                         <Toolbar
                             sx={{
@@ -158,7 +161,8 @@ export default function DrawerWithChildren(props) {
                     <List>{mainListItems}</List>
                     <Divider />
                     <List>{secondaryListItems}</List>
-                    <ListSubheader inset >
+                    <ListSubheader inset style={{ alignSelf: 'start' }}>
+                        <Copyright ShortCopyRight />
                         <Avatar variant="square" className={classes.logo} src={logo} />
                     </ListSubheader>
                 </Drawer>
@@ -179,10 +183,9 @@ export default function DrawerWithChildren(props) {
                         <Grid container spacing={3}>
                             {props.children}
                         </Grid>
-                        <Copyright sx={{ pt: 4 }} />
                     </Container>
                 </Box>
             </Box>
-        </ThemeProvider>
+        </ThemeProvider >
     );
 }

@@ -6,6 +6,8 @@ import { UserContext } from '../../AuthContext';
 import { getData } from '../../firebase/functions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
+import Divider from '@mui/material/Divider';
+import { Typography } from '@mui/material';
 
 const getParams = (str) => {
     const current_url = new URL(window.location.href);
@@ -62,7 +64,10 @@ export default function Dashboard(props) {
 
     return (
         <DrawerWithChildren >
-            <Grid container key="RadioButtons" style={{ margin: 10, padding: 5 }}>
+            <Typography variant="h6" style={{ marginLeft: '10%' }}>
+                Filters
+            </Typography>
+            <Grid container key="RadioButtons" style={{ margin: 10, padding: 5, justifyContent: 'space-evenly' }}>
                 <FormControlLabel
                     control={<Checkbox checked={radioButtons.showPlayers} color="primary" onClick={() => { handleFilterChange("showPlayers") }} />}
                     label="Show co-founders looking to join a Venture team"
@@ -73,7 +78,7 @@ export default function Dashboard(props) {
                     label="Show Venture teams looking for co-founders"
                 />
             </Grid>
-
+            <Divider sx={{ m: 2, borderBottom: 1, width: '76vw' }} />
             {displayUsers.map((userNote, index) => {
                 return (
                     <Grid item xs={12} md={4} lg={3} key={index}>

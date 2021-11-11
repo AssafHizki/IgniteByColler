@@ -2,18 +2,19 @@ import * as React from 'react';
 import DrawerWithChildren from '../Dashboard/Drawer';
 import browserHistory from '../../routes/history';
 import { UserContext } from '../../AuthContext';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
 import { updateUserAuth } from '../../firebase/functions';
 import SuccessDialog from '../Dashboard/SuccessDialog';
+import { Box } from '@mui/system';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(3),
     },
     delete: {
-        marginTop: theme.spacing(3),
+        marginTop: theme.spacing(20),
     },
 }));
 
@@ -71,10 +72,14 @@ export default function Powers(props) {
                         helperText={error && "Password should be at least 6 characters or email is taken"}
                         error={error}
                     />
-                    <Button onClick={handleSubmit} type="submit" style={{ marginTop: 20, alignSelf: "start" }}>Update</Button>
-
+                    <Button onClick={handleSubmit} type="submit" style={{ marginTop: 20 }}>Update</Button>
                 </form >
-                <Button onClick={() => console.log("delete")} color="error" className={classes.delete}>Delete Account</Button>
+                <Box sx={{ border: 3, borderColor: 'red', marginLeft: 5 }}>
+                    <Typography variant="h6" style={{ textDecoration: 'underline' }}>
+                        DANGER ZONE!
+                    </Typography>
+                    <Button onClick={() => alert("Nope, I'm not giving up on you!")} color="error" className={classes.delete}>Delete Account</Button>
+                </Box>
             </div>
         </DrawerWithChildren>
     );
