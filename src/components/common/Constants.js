@@ -3,7 +3,8 @@ const Colors = {
     "PurpleHoover": "#822272",
     "Gold": "#ffd43d",
     "GoldHoover": "#E2B200",
-    "ButtonBackground": "#03afef"
+    "ButtonBackground": "#03afef",
+    "RedButtonBackground": 'red'
 }
 
 const BackgroundImages = [

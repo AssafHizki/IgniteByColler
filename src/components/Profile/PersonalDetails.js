@@ -8,6 +8,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { updateUserAuth } from '../../firebase/functions';
 import SuccessDialog from '../Dashboard/SuccessDialog';
 import { Box } from '@mui/system';
+import GenericDialog from '../common/GenericDialog';
+import { Colors } from '../common/Constants';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -78,9 +80,14 @@ export default function Powers(props) {
                     <Typography variant="h6" style={{ textDecoration: 'underline' }}>
                         DANGER ZONE!
                     </Typography>
-                    <Button onClick={() => alert("Nope, I'm not giving up on you!")} color="error" className={classes.delete}>Delete Account</Button>
+                    <Button onClick={() => setDialog(
+                        <GenericDialog text="Are you sure you want to delete your account?" onClose={() => setDialog()}
+                            buttonTitle="permanently delete" onButtonPress={() => console.log("AA")}
+                            ButtonBackground={Colors.RedButtonBackground}
+                        />
+                    )} color="error" className={classes.delete}>Delete Account</Button>
                 </Box>
             </div>
-        </DrawerWithChildren>
+        </DrawerWithChildren >
     );
 }
