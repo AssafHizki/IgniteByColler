@@ -17,6 +17,9 @@ export default function Contacts(props) {
             browserHistory.push("/");
         }
 
+        console.log(user.myContacts)
+        console.log(user.contactsAddressedMe)
+
         async function _getData(contacts) {
             getUsersByIDs(contacts).then(usersData => { setUsers(usersData); })
                 .catch(e => console.log(e))
@@ -29,38 +32,38 @@ export default function Contacts(props) {
 
     }, [user])
 
-    let usersAddressedMe = users.filter(u => user.myContacts.includes(u.id));
-    let myContacts = users.filter(u => user.contactsAddressedMe.includes(u.id));
+    let usersAddressedMe = users.filter(u => user.contactsAddressedMe.includes(u.id));
+    let myContacts = users.filter(u => user.myContacts.includes(u.id));
 
     return (
         <DrawerWithChildren >
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography variant="h5">
+            <div style={{ display: 'flex', flexDirection: 'column', margin: 20 }}>
+                <Typography variant="h5" marginBottom={2}>
                     Contacts addressed me
                 </Typography>
-                {usersAddressedMe.map((userNote, index) => {
-                    if (userNote.addressedMe) {
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {usersAddressedMe.map((userNote, index) => {
                         return (
-                            <Grid item xs={12} md={4} lg={4} key={index}>
+                            <Grid item xs={12} m={3} lg={3} key={"AddressedMe " + index}>
                                 <StickyNote userNote={userNote} />
                             </Grid>
                         )
-                    }
-                })}
-                <Divider orientation="vertical" sx={{ maring: 5 }} style={{ border: 1 }} />
-                <Typography variant="h5">
+                    })}
+                </div>
+                <Divider sx={{ m: 2, mb: 5, mt: 5, borderBottom: 1, width: '76vw' }} />
+                <Typography variant="h5" marginBottom={2}>
                     My contacts
                 </Typography>
-                {myContacts.map((userNote, index) => {
-                    if (!userNote.addressedMe) {
+                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                    {myContacts.map((userNote, index) => {
                         return (
-                            <Grid item xs={12} md={4} lg={4} key={"usersIContacted" + index}>
+                            <Grid item xs={12} m={3} lg={3} key={"MyContacts " + index}>
                                 <StickyNote userNote={userNote} />
                             </Grid>
                         )
-                    }
-                })}
+                    })}
+                </div>
             </div>
-        </DrawerWithChildren>
+        </DrawerWithChildren >
     );
 }

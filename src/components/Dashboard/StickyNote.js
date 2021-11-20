@@ -64,7 +64,9 @@ const useStyles = makeStyles({
 function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
-    const disabledConnection = user.myContacts.includes(userNote.id);
+    const connectionType = user.myContacts.includes(userNote.id) ? "alreadyConnected"
+        : user.contactsAddressedMe.includes(userNote.id) ? "addressedMe" : "notConnected";
+
 
     const onClick = async () => {
         sendMail(userNote.fullName, userNote.email, userNote.id);
@@ -125,14 +127,16 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
                 </CardContent>
 
                 <Button size="medium" style={{ backgroundColor: Colors.ButtonBackground, color: 'white' }}
-                    onClick={onClick} disabled={disabledConnection}>
-                    {disabledConnection ? "Already Connected" : `CONTACT ${userNote.fullName.split(' ')[0]}`}</Button>
+                    onClick={onClick} disabled={connectionType === "alreadyConnected"}>
+                    {connectionType === "alreadyConnected" ? "Already Connected" :
+                        `CONTACT ${userNote.fullName.split(' ')[0]}`}
+                </Button>
             </RibbonContainer>
         </Dialog>
     );
 }
 
-export default function SimpleCard({ userNote, openDialog = false }) {
+export default function StickyNote({ userNote, openDialog = false }) {
     const classes = useStyles();
     const [dialog, setDialog] = useState();
 

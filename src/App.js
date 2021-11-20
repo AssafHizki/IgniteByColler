@@ -28,8 +28,8 @@ function MainApp() {
           elevatorPitch: thisUser.elevatorPitch,
           powers: thisUser.powers,
           fields: thisUser.fields,
-          myContacts: thisUser?.contacts.myContacts || [],
-          contactsAddressedMe: thisUser?.contacts.addressedMe || [],
+          myContacts: thisUser?.contacts?.myContacts || [],
+          contactsAddressedMe: thisUser?.contacts?.addressedMe || [],
           updateUser
         });
       }
