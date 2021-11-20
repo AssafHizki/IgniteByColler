@@ -21,6 +21,7 @@ export default function SignIn() {
     const [password, setPassword] = React.useState();
     const [error, setError] = React.useState(false);
     const user = React.useContext(UserContext);
+    const [dialog, setDialog] = React.useState();
 
     React.useEffect(() => {
         if (user) {
@@ -37,7 +38,12 @@ export default function SignIn() {
                     setError(true);
                 }
             })
-            .catch(e => console.log("error: ", e))
+            .catch(e => {
+                if (e.message === "Email not verified") {
+                    alert("Please verify your email account!")
+                }
+                console.log("error: ", e)
+            })
     };
 
     const handleResetPassword = async (e) => {
@@ -59,6 +65,9 @@ export default function SignIn() {
 
     return (
         <GeneralDesign title="Sign In">
+            {
+                dialog
+            }
             <form onSubmit={handleSubmit} className={classes.form}>
                 <TextField
                     margin="normal"

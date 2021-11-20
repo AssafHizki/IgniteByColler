@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
 import { sendMail } from '../../utils';
-import { updateUser } from '../../firebase/functions';
+import { updateUser, updateRemoteUserContacts } from '../../firebase/functions';
 import { UserContext } from '../../AuthContext';
 import SuccessDialog from './SuccessDialog';
 import { RibbonContainer, RightCornerRibbon } from "react-ribbons";
@@ -19,7 +18,10 @@ const useStyles = makeStyles({
     root: {
         minWidth: 275,
         backgroundColor: 'white',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        '&:hover, &:focus': {
+            boxShadow: 'rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;'
+        }
     },
     rootDialog: {
         minWidth: '30vw',
@@ -62,12 +64,20 @@ const useStyles = makeStyles({
 function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
-    const disabledConnection = user.contacts.find(con => con === userNote.id);
+    const disabledConnection = user.myContacts.includes(userNote.id);
 
     const onClick = async () => {
         sendMail(userNote.fullName, userNote.email, userNote.id);
-        updateUser({ "contacts": [...user.contacts, userNote.id] })
-            .then(() => onSuccess())
+        updateUser({
+            "contacts": {
+                "addressedMe": user.contactsAddressedMe,
+                "myContacts": [...user.myContacts, userNote.id]
+            }
+        })
+            .then(() => {
+                onSuccess();
+                updateRemoteUserContacts(userNote.id);
+            })
             .catch(e => console.log(e))
     }
 

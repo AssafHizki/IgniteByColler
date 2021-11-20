@@ -28,16 +28,17 @@ function MainApp() {
           elevatorPitch: thisUser.elevatorPitch,
           powers: thisUser.powers,
           fields: thisUser.fields,
-          contacts: thisUser.contacts || [],
+          myContacts: thisUser?.contacts.myContacts || [],
+          contactsAddressedMe: thisUser?.contacts.addressedMe || [],
           updateUser
         });
       }
     })
       .catch(e => console.log("AuthError: ", e))
-
   }
 
   React.useEffect(() => {
+    console.log(`Created By Asaf Hizkiahou\nhttps://www.linkedin.com/in/asafhizki`)
     var unsubscribe = onAuthStateChanged(auth, function (persistedUser) {
       if (persistedUser && persistedUser.emailVerified && persistedUser.uid) {
         updateUser(persistedUser)

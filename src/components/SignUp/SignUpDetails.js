@@ -78,7 +78,7 @@ export default function SignUpDetails(props) {
         let currSuperPowers = [];
         let currFields = [];
         thisSuperPowers.forEach(s => currSuperPowers.push(s[0] !== "other" ? s[0] : s[1]))
-        currFields.forEach(s => currFields.push(s[0] !== "other" ? s[0] : s[1]))
+        thisFields.forEach(s => currFields.push(s[0] !== "other" ? s[0] : s[1]))
 
         let data = {
             whyJoin,

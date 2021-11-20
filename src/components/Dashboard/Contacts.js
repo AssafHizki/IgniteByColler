@@ -4,10 +4,10 @@ import DrawerWithChildren from './Drawer';
 import StickyNote from './StickyNote';
 import browserHistory from '../../routes/history';
 import { UserContext } from '../../AuthContext';
-import { getData } from '../../firebase/functions';
+import { getUsersByIDs } from '../../firebase/functions';
 import { Divider, Typography } from '@mui/material';
 
-export default function Dashboard(props) {
+export default function Contacts(props) {
 
     const user = React.useContext(UserContext);
     const [users, setUsers] = React.useState([]);
@@ -17,58 +17,50 @@ export default function Dashboard(props) {
             browserHistory.push("/");
         }
 
-        async function _getData() {
-            getData().then(usersData => { setUsers(usersData.filter(u => user.contacts.includes(u.id))); })
+        async function _getData(contacts) {
+            getUsersByIDs(contacts).then(usersData => { setUsers(usersData); })
                 .catch(e => console.log(e))
         }
 
-        if (user) {
-            _getData();
+        if (user && user.myContacts && user.contactsAddressedMe) {
+            let contacts = [...user.myContacts, ...user.contactsAddressedMe];
+            _getData(contacts);
         }
 
     }, [user])
 
-    let usersAddressedMe = users.filter(u => u.addressedMe);
-    let usersIContacted = users.filter(u => !u.addressedMe);
+    let usersAddressedMe = users.filter(u => user.myContacts.includes(u.id));
+    let myContacts = users.filter(u => user.contactsAddressedMe.includes(u.id));
 
     return (
         <DrawerWithChildren >
-            {
-                usersAddressedMe.length > 0 &&
-                <div>
-                    <Typography variant="h5">
-                        Addressed me
-                    </Typography>
-                    {usersAddressedMe.map((userNote, index) => {
-                        if (userNote.addressedMe) {
-                            return (
-                                <Grid item xs={12} md={4} lg={4} key={index}>
-                                    <StickyNote userNote={userNote} />
-                                </Grid>
-                            )
-                        }
-                    })}
-                </div>
-            }
-            <Divider orientation="horizontal" sx={{ maring: 5 }} style={{ border: 1 }} />
-            {
-                usersIContacted.length > 0 &&
-                <div>
-                    <Typography variant="h5">
-                        My contacts
-                    </Typography>
-                    {usersIContacted.map((userNote, index) => {
-                        if (!userNote.addressedMe) {
-                            return (
-                                <Grid item xs={12} md={4} lg={4} key={"usersIContacted" + index}>
-                                    <StickyNote userNote={userNote} />
-                                </Grid>
-                            )
-                        }
-                    })}
-                </div>
-            }
-
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                <Typography variant="h5">
+                    Contacts addressed me
+                </Typography>
+                {usersAddressedMe.map((userNote, index) => {
+                    if (userNote.addressedMe) {
+                        return (
+                            <Grid item xs={12} md={4} lg={4} key={index}>
+                                <StickyNote userNote={userNote} />
+                            </Grid>
+                        )
+                    }
+                })}
+                <Divider orientation="vertical" sx={{ maring: 5 }} style={{ border: 1 }} />
+                <Typography variant="h5">
+                    My contacts
+                </Typography>
+                {myContacts.map((userNote, index) => {
+                    if (!userNote.addressedMe) {
+                        return (
+                            <Grid item xs={12} md={4} lg={4} key={"usersIContacted" + index}>
+                                <StickyNote userNote={userNote} />
+                            </Grid>
+                        )
+                    }
+                })}
+            </div>
         </DrawerWithChildren>
     );
 }

@@ -64,9 +64,6 @@ export default function Dashboard(props) {
 
     return (
         <DrawerWithChildren >
-            <Typography variant="h6" style={{ marginLeft: '10%' }}>
-                Filters
-            </Typography>
             <Grid container key="RadioButtons" style={{ margin: 10, padding: 5, justifyContent: 'space-evenly' }}>
                 <FormControlLabel
                     control={<Checkbox checked={radioButtons.showPlayers} color="primary" onClick={() => { handleFilterChange("showPlayers") }} />}

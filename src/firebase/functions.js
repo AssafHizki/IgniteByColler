@@ -25,13 +25,17 @@ const createUser = async (data) => {
 const signIn = async (email, password) => {
     return signInWithEmailAndPassword(auth, email, password)
         .then(userCredential => {
-            if (!userCredential.emailVerified) {
+            if (!userCredential.user.emailVerified) {
                 sendEmailVerification(auth.currentUser);
-                return false;
+                throw new Error("Email not verified");
             }
             return getUser(userCredential.user.uid)
         })
-        .catch(e => { console.log("Error: ", e); return false })
+        .catch(e => {
+            if (e.message === "Email not verified") { throw e }
+            console.log("Error: ", e);
+            return false
+        })
 }
 
 const resetPassword = async (email) => {
@@ -74,6 +78,28 @@ const updateUser = async (props) => {
         .catch(e => { console.log("E: ", e); return false; })
 }
 
+const updateRemoteUserContacts = async (remoteUserID) => {
+    if (!remoteUserID) {
+        return false;
+    }
+
+    return getDoc(doc(db, 'users', remoteUserID))
+        .then(userDoc => {
+            if (!userDoc.exists) { return false; }
+            let remoteData = userDoc.data();
+
+            return updateDoc(doc(db, 'users', remoteUserID), {
+                "contacs": {
+                    "addressedMe": [...remoteData.contacts.addressedMe, auth.currentUser.uid],
+                    "MyContacts": [...remoteData.contacts.myContacts]
+                }
+            })
+                .then(() => { return true; })
+                .catch(e => { console.log("E: ", e); return false; })
+        })
+}
+
+
 const updateUserAuth = async (email = null, password = null) => {
     if (!email && !password) {
         return false;
@@ -103,11 +129,28 @@ const getData = async () => {
                     arr.push(userDoc.data())
                 })
             }
-            console.log(arr)
             return arr;
         })
         .catch(e => { console.log("E: ", e); return false; })
 }
 
+const getUsersByIDs = async (IDs) => {
+    let arr = [];
 
-export { createUser, signIn, resetPassword, getUser, logOut, updateUser, updateUserAuth, getData }
+    return getDocs(collectionGroup(db, 'users'))
+        .then(col => {
+            if (!col.empty) {
+                col.docs.forEach(userDoc => {
+                    if (IDs.includes(userDoc.id)) {
+                        arr.push(userDoc.data())
+                    }
+                })
+            }
+            return arr;
+        })
+        .catch(e => { console.log("E: ", e); return false; })
+}
+export {
+    createUser, signIn, resetPassword, getUser, logOut, updateUser, updateRemoteUserContacts,
+    updateUserAuth, getData, getUsersByIDs
+}
