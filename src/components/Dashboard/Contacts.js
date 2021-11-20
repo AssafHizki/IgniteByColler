@@ -17,9 +17,6 @@ export default function Contacts(props) {
             browserHistory.push("/");
         }
 
-        console.log(user.myContacts)
-        console.log(user.contactsAddressedMe)
-
         async function _getData(contacts) {
             getUsersByIDs(contacts).then(usersData => { setUsers(usersData); })
                 .catch(e => console.log(e))

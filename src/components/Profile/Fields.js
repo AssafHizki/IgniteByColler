@@ -31,11 +31,11 @@ export default function Fields(props) {
     const type = location?.state?.type;
 
     const [fields, setFields] = React.useState({
-        foodtech: user?.powers?.includes("foodtech"),
-        fintech: user?.powers?.includes("fintech"),
-        cyber: user?.powers?.includes("cyber"),
-        industry: user?.powers?.includes("industry"),
-        other: user?.powers?.find(p =>
+        foodtech: user?.fields?.includes("foodtech"),
+        fintech: user?.fields?.includes("fintech"),
+        cyber: user?.fields?.includes("cyber"),
+        industry: user?.fields?.includes("industry"),
+        other: user?.fields?.find(p =>
         (p !== "foodtech" && p !== "fintech"
             && p !== "cyber" && p !== "industry")
         )

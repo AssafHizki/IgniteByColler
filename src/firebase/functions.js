@@ -87,12 +87,18 @@ const updateRemoteUserContacts = async (remoteUserID) => {
         .then(userDoc => {
             if (!userDoc.exists) { return false; }
             let remoteData = userDoc.data();
+            let contacts = { "addressedMe": [auth.currentUser.uid] }
+
+            if (remoteData && remoteData.contacts && remoteData.contacts.addressedMe) {
+                contacts.addressedMe = [...remoteData.contacts.addressedMe, auth.currentUser.uid];
+            }
+            if (remoteData && remoteData.contacts && remoteData.contacts.myContacts) {
+                contacts.MyContacts = remoteData.contacts.myContacts;
+            }
+
 
             return updateDoc(doc(db, 'users', remoteUserID), {
-                "contacs": {
-                    "addressedMe": [...remoteData.contacts.addressedMe, auth.currentUser.uid],
-                    "MyContacts": [...remoteData.contacts.myContacts]
-                }
+                contacts
             })
                 .then(() => { return true; })
                 .catch(e => { console.log("E: ", e); return false; })
