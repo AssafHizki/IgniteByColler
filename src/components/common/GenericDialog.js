@@ -13,7 +13,7 @@ const useStyles = makeStyles({
 
 export default function GenericDialog({ onClose, text, buttonTitle = null, onButtonPress = null, ButtonBackground = null }) {
     const classes = useStyles();
-    console.log(ButtonBackground)
+
     return (
         <Dialog onClose={onClose} open>
             <Typography className={classes.text} color="primary">

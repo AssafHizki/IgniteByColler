@@ -1,9 +1,10 @@
 import { db, auth } from './index';
 import {
     signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut,
-    updatePassword, updateEmail, sendPasswordResetEmail, sendEmailVerification
+    updatePassword, updateEmail, sendPasswordResetEmail, sendEmailVerification,
+    deleteUser
 } from "firebase/auth";
-import { setDoc, doc, getDoc, updateDoc, collectionGroup, getDocs } from 'firebase/firestore/lite';
+import { setDoc, doc, getDoc, updateDoc, collectionGroup, getDocs, deleteDoc } from 'firebase/firestore/lite';
 
 // For the full list of FireStore commands see:
 // https://firebase.google.com/docs/reference/js/firestore_lite
@@ -20,6 +21,19 @@ const createUser = async (data) => {
                     return true
                 })
         })
+}
+
+const deleteCurrUser = async () => {
+    return getDoc(doc(db, 'users', auth.currentUser.uid))
+        .then(userDoc => {
+            if (!userDoc.exists) { return false; }
+
+            return setDoc(doc(db, "deleted-users", auth.currentUser.uid), { ...userDoc.data() })
+                .then(() => { return deleteUser(auth.currentUser) })
+                .then(() => { return deleteDoc(doc(db, 'users', auth.currentUser.uid)) })
+                .then(() => logOut());
+        })
+        .catch(e => { console.log("E: ", e); return false; })
 }
 
 const signIn = async (email, password) => {
@@ -158,5 +172,5 @@ const getUsersByIDs = async (IDs) => {
 }
 export {
     createUser, signIn, resetPassword, getUser, logOut, updateUser, updateRemoteUserContacts,
-    updateUserAuth, getData, getUsersByIDs
+    updateUserAuth, getData, getUsersByIDs, deleteCurrUser
 }

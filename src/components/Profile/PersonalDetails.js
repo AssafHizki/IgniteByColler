@@ -5,10 +5,11 @@ import { UserContext } from '../../AuthContext';
 import { Button, Typography } from '@mui/material';
 import TextField from '@material-ui/core/TextField';
 import { makeStyles } from '@material-ui/core/styles';
-import { updateUserAuth } from '../../firebase/functions';
+import { updateUserAuth, deleteCurrUser } from '../../firebase/functions';
 import SuccessDialog from '../Dashboard/SuccessDialog';
 import { Box } from '@mui/system';
 import GenericDialog from '../common/GenericDialog';
+import SignInDialog from '../SignInDialog';
 import { Colors } from '../common/Constants';
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +83,9 @@ export default function Powers(props) {
                     </Typography>
                     <Button onClick={() => setDialog(
                         <GenericDialog text="Are you sure you want to delete your account?" onClose={() => setDialog()}
-                            buttonTitle="permanently delete" onButtonPress={() => console.log("AA")}
+                            buttonTitle="permanently delete" onButtonPress={() => setDialog(
+                                <SignInDialog onClose={() => setDialog()} onLoggedIn={() => deleteCurrUser()} />
+                            )}
                             ButtonBackground={Colors.RedButtonBackground}
                         />
                     )} color="error" className={classes.delete}>Delete Account</Button>
