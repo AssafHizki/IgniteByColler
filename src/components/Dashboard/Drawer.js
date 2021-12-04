@@ -23,6 +23,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import { UserContext } from '../../AuthContext';
 import { useLocation } from "react-router-dom";
 import { Colors } from '../common/Constants';
+import { Link } from '@mui/material';
 
 const drawerWidth = 240;
 
@@ -161,10 +162,14 @@ export default function DrawerWithChildren(props) {
                     <List>{mainListItems}</List>
                     <Divider />
                     <List>{secondaryListItems}</List>
-                    <ListSubheader inset style={{ alignSelf: 'start' }}>
-                        <Copyright ShortCopyRight />
-                        <Avatar variant="square" className={classes.logo} src={logo} />
-                    </ListSubheader>
+                    {open &&
+                        <div style={{ alignSelf: 'center' }}>
+                            <Copyright ShortCopyRight />
+                            <Link target="_blank" href="https://www.collerignite.com/">
+                                <Avatar variant="square" className={classes.logo} src={logo} />
+                            </Link>
+                        </div>
+                    }
                 </Drawer>
                 <Box
                     component="main"
@@ -179,8 +184,8 @@ export default function DrawerWithChildren(props) {
                     }}
                 >
                     <Toolbar />
-                    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-                        <Grid container spacing={3}>
+                    <Container maxWidth="lg" sx={{ mt: 8, mb: 4 }}>
+                        <Grid container spacing={8} >
                             {props.children}
                         </Grid>
                     </Container>

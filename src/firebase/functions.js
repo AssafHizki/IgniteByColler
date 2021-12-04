@@ -170,7 +170,16 @@ const getUsersByIDs = async (IDs) => {
         })
         .catch(e => { console.log("E: ", e); return false; })
 }
+
+const updateMatchCollection = async (user1ID, user2ID) => {
+    return setDoc(doc(db, 'matches', user1ID), { users: [user1ID, user2ID], timestamp: Date.now() })
+        .then(() => {
+            return true
+        })
+        .catch(e => console.log(e))
+}
+
 export {
     createUser, signIn, resetPassword, getUser, logOut, updateUser, updateRemoteUserContacts,
-    updateUserAuth, getData, getUsersByIDs, deleteCurrUser
+    updateUserAuth, getData, getUsersByIDs, deleteCurrUser, updateMatchCollection
 }

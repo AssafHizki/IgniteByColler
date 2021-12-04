@@ -5,8 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import Dialog from '@material-ui/core/Dialog';
-import { sendMail } from '../../utils';
-import { updateUser, updateRemoteUserContacts } from '../../firebase/functions';
+import { sendMail, sendMatchFoundEmail } from '../../utils';
+import { updateUser, updateRemoteUserContacts, updateMatchCollection } from '../../firebase/functions';
 import { UserContext } from '../../AuthContext';
 import SuccessDialog from './SuccessDialog';
 import { RibbonContainer, RightCornerRibbon } from "react-ribbons";
@@ -24,7 +24,6 @@ const useStyles = makeStyles({
         }
     },
     rootDialog: {
-        minWidth: '30vw',
         backgroundColor: 'white',
         boxShadow: 'none'
     },
@@ -51,7 +50,15 @@ const useStyles = makeStyles({
         minHeight: 300,
         fontSize: 20,
         fontWeight: 'bold',
-        margin: 10
+        margin: 10,
+        justifyContent: 'space-between'
+    },
+    ribbonDialogContainer: {
+        minWidth: 150,
+        minHeight: 300,
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: 5
     },
     content: {
         position: 'absolute',
@@ -68,8 +75,16 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
         : user.contactsAddressedMe.includes(userNote.id) ? "addressedMe" : "notConnected";
 
 
-    const onClick = async () => {
-        sendMail(userNote.fullName, userNote.email, userNote.id);
+    const onClick = async (matchConnection) => {
+        if (matchConnection) {
+            sendMatchFoundEmail(user.email, user.fullName, userNote.email, userNote.fullName);
+            updateMatchCollection(user.uid, userNote.id);
+        }
+
+        else {
+            sendMail(userNote.fullName, userNote.email, userNote.id);
+        }
+
         updateUser({
             "contacts": {
                 "addressedMe": user.contactsAddressedMe,
@@ -85,7 +100,7 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
 
     return (
         <Dialog onClose={onClose} open>
-            <RibbonContainer className={classes.ribbon}>
+            <RibbonContainer className={classes.ribbonDialogContainer}>
                 <CardContent className={classes.rootDialog}>
                     <RightCornerRibbon backgroundColor={userNote.type === "team" ? Colors.Purple : Colors.Gold}
                         color={userNote.type === "team" ? '#ffff' : "black"} fontFamily="Arial"
@@ -96,7 +111,10 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
                         MEET {user.fullName.split(' ')[0]}
                     </Typography>
                     <Divider />
-                    <Typography variant="body1" style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                    <Typography variant="body1" style={{
+                        display: 'flex', alignItems: 'center', marginTop: 5,
+                        padding: 10
+                    }}>
                         Skills {userNote.powers.map((power, index) => (
                             power && power.length > 0 &&
                             <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"Power" + index}>
@@ -104,7 +122,10 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
                             </div>
                         ))}
                     </Typography>
-                    <Typography variant="body1" style={{ display: 'flex', alignItems: 'center', marginTop: 5 }}>
+                    <Typography variant="body1" style={{
+                        display: 'flex', alignItems: 'center', marginTop: 5,
+                        padding: 10
+                    }}>
                         Verticals {userNote.fields.map((field, index) => (
                             field && field.length > 0 &&
                             <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"field" + index}>
@@ -112,27 +133,35 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
                             </div>
                         ))}
                     </Typography>
-                    <Typography variant="h5" style={{ fontWeight: 'bold', marginTop: 20 }}>
-                        About me
-                    </Typography>
-                    <Typography color="body2" gutterBottom>
-                        {userNote.elevatorPitch}
-                    </Typography>
-                    <Typography variant="h5" style={{ fontWeight: 'bold', marginTop: 20 }} >
-                        What's unique about you
-                    </Typography>
-                    <Typography color="body2" gutterBottom>
-                        {userNote.whyJoin}
-                    </Typography>
+                    <div style={{ padding: 10 }}>
+                        <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+                            About me
+                        </Typography>
+                        <Typography color="body2" gutterBottom>
+                            {userNote.elevatorPitch}
+                        </Typography>
+                    </div>
+                    <div style={{ padding: 10 }}>
+
+                        <Typography variant="h5" style={{ fontWeight: 'bold' }} >
+                            What's unique about you
+                        </Typography>
+                        <Typography color="body2" gutterBottom>
+                            {userNote.whyJoin}
+                        </Typography>
+                    </div>
                 </CardContent>
 
-                <Button size="medium" style={{ backgroundColor: Colors.ButtonBackground, color: 'white' }}
-                    onClick={onClick} disabled={connectionType === "alreadyConnected"}>
+                <Button size="medium" style={{
+                    backgroundColor: Colors.ButtonBackground, color: 'white', alignSelf: 'center'
+                }}
+                    onClick={() => onClick(connectionType === "addressedMe")} disabled={connectionType === "alreadyConnected"}>
                     {connectionType === "alreadyConnected" ? "Already Connected" :
-                        `CONTACT ${userNote.fullName.split(' ')[0]}`}
+                        connectionType === "addressedMe" ? `CONNECT WITH ${userNote.fullName.split(' ')[0]}` :
+                            `CONTACT ${userNote.fullName.split(' ')[0]}`}
                 </Button>
             </RibbonContainer>
-        </Dialog>
+        </Dialog >
     );
 }
 
@@ -164,18 +193,18 @@ export default function StickyNote({ userNote, openDialog = false }) {
                 >
                     {userNote.type === "team" ? "TEAM" : "IGNITER"}
                 </RightCornerRibbon>
-                <CardContent >
+                <CardContent  >
                     {
                         userNote.powers.length > 0 &&
-                        <div>
+                        <div style={{ padding: 10 }}>
                             <Typography variant="h6" style={{ fontWeight: 'bold' }} >
                                 SKILLS
                             </Typography>
                             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
                                 {userNote.powers.map((power, index) => (
                                     power && power.length > 0 &&
-                                    <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"Power" + index}>
-                                        <Chip label={power} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                                    <div style={{ margin: 5, fontWeight: 9 }} key={"Power" + index}>
+                                        <Chip label={power} style={{ color: 'white ', backgroundColor: 'gray', fontSize: 12 }} />
                                     </div>
                                 ))}
                             </div>
@@ -183,27 +212,32 @@ export default function StickyNote({ userNote, openDialog = false }) {
                     }
                     {
                         userNote.fields.length > 0 &&
-                        <div>
+                        <div style={{ padding: 10 }}>
                             <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} >
                                 VERTICALS
                             </Typography>
                             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
                                 {userNote.fields.map((field, index) => (
-                                    <div style={{ margin: 5 }} key={"Field" + index}>
-                                        <Chip label={field} style={{ color: 'white ', backgroundColor: 'gray' }} />
+                                    <div style={{ margin: 5, fontWeight: 8 }} key={"Field" + userNote.id + index}>
+                                        <Chip label={field} style={{ color: 'white ', backgroundColor: 'gray', fontSize: 12 }} />
                                     </div>
                                 ))}
                             </div>
                         </div>
                     }
-                    <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} gutterBottom >
-                        ABOUT
-                    </Typography>
-                    <Typography style={{ color: 'GrayText', textAlign: 'left' }} variant="body2">
-                        {userNote.elevatorPitch}
-                    </Typography>
+                    <div style={{ padding: 10 }}>
+                        <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} gutterBottom >
+                            ABOUT
+                        </Typography>
+                        <Typography style={{ color: 'GrayText', textAlign: 'left' }} variant="body2">
+                            {userNote.elevatorPitch}
+                        </Typography>
+                    </div>
                 </CardContent>
-                <Button size="medium" style={{ color: "white", justifyContent: 'center', backgroundColor: Colors.ButtonBackground }}
+                <Button size="medium" style={{
+                    color: "white", justifyContent: 'center', backgroundColor: Colors.ButtonBackground,
+                    marginTop: 8
+                }}
                     onClick={() => openNoteDialog()}>
                     MORE</Button>
             </RibbonContainer>
