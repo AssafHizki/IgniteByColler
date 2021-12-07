@@ -65,7 +65,7 @@ export default function GeneralDesign(props) {
                                     Meet your new team member!
                                 </Typography>
                                 <Typography variant="h5" style={{ marginBottom: 5 }}>
-                                    Find a startup to join (or a new co-founder) in a super-easy way.
+                                    Find a co-founder (or join a startup) in a super-easy way.
                                     Go ahead, try it!
                                 </Typography>
                             </div>

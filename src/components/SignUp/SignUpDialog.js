@@ -135,7 +135,7 @@ export default function SignUpDialog({ onClose, data }) {
                     />
                     <FormControlLabel
                         control={<Checkbox checked={privacyAgreement} color="primary" onClick={() => { setPrivacyAgreement(!privacyAgreement); setPrivacyAgreementError(privacyAgreement) }} />}
-                        label={`I have read and agreed to the ${<a target="_blank" href="https://docs.google.com/document/d/1_z2F8a4_oE_XSC7Oyf2KYZq0MWejJQzUVe2PIY-Udrg/edit?usp=sharing">terms and conditions</a>}`}
+                        label={<div style={{ display: 'flex', alignItems: 'center' }}><p>{"I have read and agreed to the\b"} </p><a target="_blank" href="https://docs.google.com/document/d/1_z2F8a4_oE_XSC7Oyf2KYZq0MWejJQzUVe2PIY-Udrg/edit?usp=sharing">terms and conditions</a></div>}
                     />
                     {
                         privacyAgreementError &&
