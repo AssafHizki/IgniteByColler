@@ -58,10 +58,22 @@ export default function GeneralDesign(props) {
                             </Link>
                         )
                     }
-
-                    <Typography variant="h3" style={{ marginBottom: 5 }}>
-                        {props.title ? props.title : "Ignite By Coller"}
-                    </Typography>
+                    {
+                        props.entryPage ?
+                            <div>
+                                <Typography variant="h4" style={{ fontWeight: 'bold' }}>
+                                    Meet your new team member!
+                                </Typography>
+                                <Typography variant="h5" style={{ marginBottom: 5 }}>
+                                    Find a startup to join (or a new co-founder) in a super-easy way.
+                                    Go ahead, try it!
+                                </Typography>
+                            </div>
+                            :
+                            <Typography variant="h3" style={{ marginBottom: 5 }}>
+                                {props.title ? props.title : "Ignite By Coller"}
+                            </Typography>
+                    }
                     {
                         props.children
                     }

@@ -64,7 +64,7 @@ export default function SignIn() {
     }
 
     return (
-        <GeneralDesign title="Sign In">
+        <GeneralDesign title="Sign In" entryPage>
             {
                 dialog
             }
