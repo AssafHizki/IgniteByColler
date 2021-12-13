@@ -10,14 +10,13 @@ import logo from '../images/logo.png';
 import { makeStyles } from '@material-ui/core/styles';
 import browserHistory from '../routes/history'
 import { Link } from '@mui/material';
-import { BackgroundImages } from './common/Constants';
 
 const useStyles = makeStyles((theme) => ({
     root: {
         height: '100vh',
     },
     image: {
-        backgroundImage: `url(${BackgroundImages[Math.floor(Math.random() * (BackgroundImages.length - 1))]})`,
+        backgroundImage: `url(/images/${Math.floor(Math.random() * (7)) + 1}.jpg)`,
         backgroundRepeat: 'no-repeat',
         backgroundColor:
             theme.palette.type === 'light' ? theme.palette.grey[50] : theme.palette.grey[900],

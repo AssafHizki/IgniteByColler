@@ -49,7 +49,7 @@ export default function Contacts(props) {
                 </div>
                 <Divider sx={{ m: 2, mb: 5, mt: 5, borderBottom: 1, width: '76vw' }} />
                 <Typography variant="h5" marginBottom={2}>
-                    My contacts
+                    Contacts I addressed
                 </Typography>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                     {myContacts.map((userNote, index) => {
