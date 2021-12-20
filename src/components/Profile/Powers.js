@@ -19,6 +19,8 @@ import SuccessDialog from '../Dashboard/SuccessDialog';
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(3),
+        marginLeft: theme.spacing(9)
+
     },
 }));
 
@@ -50,13 +52,13 @@ export default function Powers(props) {
         setSuperPowers({ ...superPowers, [event.target.name]: event.target.checked });
     };
 
-    let superPowerError = Object.entries(superPowers).filter((v) => { return v[1] }).length > 2;
+    let superPowerError = Object.entries(superPowers).filter((v) => { return v[1] }).length > 3;
 
     const handleSubmit = (event) => {
         event.preventDefault();
         let thisSuperPowers = Object.entries(superPowers).filter((v) => { return v[1] });
 
-        if (thisSuperPowers.length > 0 && thisSuperPowers.length < 3) {
+        if (thisSuperPowers.length > 0 && thisSuperPowers.length < 4) {
             let returnValue = [];
             thisSuperPowers.forEach(s => returnValue.push(s[0] !== "other" ? s[0] : s[1]))
 

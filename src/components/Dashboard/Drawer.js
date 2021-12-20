@@ -165,7 +165,7 @@ export default function DrawerWithChildren(props) {
                     {open &&
                         <div style={{ alignSelf: 'center' }}>
                             <Copyright ShortCopyRight />
-                            <Link target="_blank" href="https://www.collerignite.com/">
+                            <Link target="_blank" href="https://www.collerignite.com/" rel="noopener">
                                 <Avatar variant="square" className={classes.logo} src={logo} />
                             </Link>
                         </div>

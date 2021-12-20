@@ -19,6 +19,7 @@ import SuccessDialog from '../Dashboard/SuccessDialog';
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(3),
+        marginLeft: theme.spacing(9)
     },
 }));
 
@@ -51,13 +52,13 @@ export default function Fields(props) {
         setFields({ ...fields, [event.target.name]: event.target.checked });
     };
 
-    let fieldsError = Object.entries(fields).filter((v) => { return v[1] }).length > 3;
+    let fieldsError = Object.entries(fields).filter((v) => { return v[1] }).length > 5;
 
     const handleSubmit = (event) => {
         event.preventDefault();
         let thisFields = Object.entries(fields).filter((v) => { return v[1] });
 
-        if (thisFields.length > 0 && thisFields.length < 4) {
+        if (thisFields.length > 0 && thisFields.length < 6) {
             let returnValue = [];
             thisFields.forEach(s => returnValue.push(s[0] !== "other" ? s[0] : s[1]))
             updateUser({ "fields": returnValue })

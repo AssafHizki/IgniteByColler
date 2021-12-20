@@ -1,7 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import sticky_note from '../../images/sticky_note.png';
 import Dialog from '@material-ui/core/Dialog';
 import { UserContext } from '../../AuthContext';
 

@@ -34,7 +34,7 @@ export default function SignUp() {
             </div>
 
 
-            <Link href="signin" variant="body2" sx={{ marginTop: 5 }}>
+            <Link href="signin" variant="body2" sx={{ marginTop: 5 }} rel="noopener">
                 Have an account? Sign In
             </Link>
 

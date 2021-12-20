@@ -104,12 +104,12 @@ export default function SignIn() {
                 </Button>
                 <Grid container >
                     <Grid item xs={5}>
-                        <Link component="button" variant="body2" onClick={handleResetPassword} >
+                        <Link component="button" variant="body2" onClick={handleResetPassword} rel="noopener">
                             Forgot password?
                         </Link>
                     </Grid>
                     <Grid item xs>
-                        <Link href="signup" variant="body2" >
+                        <Link href="signup" variant="body2" rel="noopener">
                             Don't have an account? Sign Up
                         </Link>
                     </Grid>

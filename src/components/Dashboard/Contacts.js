@@ -39,26 +39,36 @@ export default function Contacts(props) {
                     Contacts addressed me
                 </Typography>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    {usersAddressedMe.map((userNote, index) => {
-                        return (
-                            <Grid item xs={12} m={3} lg={3} key={"AddressedMe " + index}>
-                                <StickyNote userNote={userNote} />
-                            </Grid>
-                        )
-                    })}
+                    {
+                        usersAddressedMe?.length > 0 ?
+                            usersAddressedMe.map((userNote, index) => {
+                                return (
+                                    <Grid item xs={12} m={3} lg={3} key={"AddressedMe " + index}>
+                                        <StickyNote userNote={userNote} />
+                                    </Grid>
+                                )
+                            })
+                            :
+                            <p>Nothing here yet, go ping some profiles :)</p>
+                    }
                 </div>
                 <Divider sx={{ m: 2, mb: 5, mt: 5, borderBottom: 1, width: '76vw' }} />
                 <Typography variant="h5" marginBottom={2}>
                     Contacts I addressed
                 </Typography>
                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                    {myContacts.map((userNote, index) => {
-                        return (
-                            <Grid item xs={12} m={3} lg={3} key={"MyContacts " + index}>
-                                <StickyNote userNote={userNote} />
-                            </Grid>
-                        )
-                    })}
+                    {
+                        myContacts.length > 0 ?
+                            myContacts.map((userNote, index) => {
+                                return (
+                                    <Grid item xs={12} m={3} lg={3} key={"MyContacts " + index}>
+                                        <StickyNote userNote={userNote} />
+                                    </Grid>
+                                )
+                            })
+                            :
+                            <p>Nothing here yet, go ping some profiles :)</p>
+                    }
                 </div>
             </div>
         </DrawerWithChildren >

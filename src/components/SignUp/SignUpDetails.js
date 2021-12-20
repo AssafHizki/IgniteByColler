@@ -12,6 +12,7 @@ import { GeneralDesign } from '../utils';
 import { makeStyles } from '@material-ui/core/styles';
 import SignUpDialog from './SignUpDialog';
 import browserHistory from '../../routes/history';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles((theme) => ({
     form: {
@@ -61,8 +62,11 @@ export default function SignUpDetails(props) {
         setFields({ ...fields, [event.target.name]: event.target.checked });
     };
 
-    let superPowerError = Object.entries(superPowers).filter((v) => { return v[1] }).length > 2;
-    let fieldsError = Object.entries(fields).filter((v) => { return v[1] }).length > 3;
+    let superPowerError = Object.entries(superPowers).filter((v) => { return v[1] }).length > 3;
+    let fieldsError = Object.entries(fields).filter((v) => { return v[1] }).length > 5;
+
+    let elevatorError = elevatorPitch.length > 250;
+    let whyJoinError = whyJoin.length > 250;
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -70,8 +74,12 @@ export default function SignUpDetails(props) {
         let thisSuperPowers = Object.entries(superPowers).filter((v) => { return v[1] });
         let thisFields = Object.entries(fields).filter((v) => { return v[1] });
 
-        if (thisSuperPowers.length < 1 || thisSuperPowers.length > 2 ||
-            thisFields.length < 1 && thisFields.length > 3) {
+        if (thisSuperPowers.length < 1 || thisSuperPowers.length > 3 ||
+            thisFields.length < 1 && thisFields.length > 5) {
+            return false;
+        }
+
+        if (elevatorPitch?.length > 250 || whyJoin?.length > 250) {
             return false;
         }
 
@@ -92,11 +100,13 @@ export default function SignUpDetails(props) {
 
     return (
         <div>
-
             <GeneralDesign title="Sign Up" goBack={() => browserHistory.push("/signin")}>
                 {
                     dialog
                 }
+                <Typography variant="body2" color="text.secondary" display="flex" alignItems="center" >
+                    *You can change everything after signup
+                </Typography>
                 <FormControl required error={superPowerError} component="fieldset" className={classes.formControl}>
                     <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "My super powers are" : "Looking for someone with a super power in"}</FormLabel>
                     <FormGroup>
@@ -128,7 +138,7 @@ export default function SignUpDetails(props) {
                             }
                         />
                     </FormGroup>
-                    <FormHelperText>You can choose up to two options</FormHelperText>
+                    <FormHelperText>You can choose up to 3 options</FormHelperText>
                 </FormControl>
                 <FormControl required error={fieldsError} component="fieldset" className={classes.formControl}>
                     <FormLabel style={{ alignSelf: 'start' }}>{type === "single" ? "I want to join a venture in the field of" : "Our fields are"}</FormLabel>
@@ -178,7 +188,7 @@ export default function SignUpDetails(props) {
                             }
                         />
                     </FormGroup>
-                    <FormHelperText>You can choose up to three options</FormHelperText>
+                    <FormHelperText>You can choose up to 5 options</FormHelperText>
                 </FormControl>
                 <form onSubmit={handleSubmit} className={classes.form}>
                     <TextField
@@ -187,11 +197,13 @@ export default function SignUpDetails(props) {
                         required
                         fullWidth
                         id="elevator_pitch"
-                        label={type === "single" ? "Introduce yourself to the team" : "Describe your project (elevator pitch)"}
+                        label={type === "single" ? "Introduce yourself to the team" : "Describe your venture (elevator pitch)"}
                         autoComplete="elevator_pitch"
                         onChange={e => setElevatorPitch(e.target.value)}
                         value={elevatorPitch}
                         multiline
+                        error={elevatorError}
+                        helperText={elevatorError && "You can write up to 250 characters"}
                     />
                     <TextField
                         variant="outlined"
@@ -204,6 +216,8 @@ export default function SignUpDetails(props) {
                         onChange={e => setWhyJoin(e.target.value)}
                         value={whyJoin}
                         multiline
+                        error={whyJoinError}
+                        helperText={whyJoinError && "You can write up to 250 characters"}
                     />
                     <Button
                         type="submit"

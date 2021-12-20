@@ -52,7 +52,7 @@ export default function GeneralDesign(props) {
                     {
                         props.goBack && (
 
-                            <Link variant="body2" style={{ marginBottom: 15, textDecoration: 'underline' }} href="/">
+                            <Link variant="body2" style={{ marginBottom: 15, textDecoration: 'underline' }} href="/" rel="noopener">
                                 back to home page ->
                             </Link>
                         )

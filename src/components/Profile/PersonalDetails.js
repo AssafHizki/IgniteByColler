@@ -15,9 +15,13 @@ import { Colors } from '../common/Constants';
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(3),
+        marginLeft: theme.spacing(9)
+
     },
     delete: {
         marginTop: theme.spacing(20),
+        marginLeft: theme.spacing(9)
+
     },
 }));
 

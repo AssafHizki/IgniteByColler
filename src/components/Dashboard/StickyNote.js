@@ -13,11 +13,29 @@ import { RibbonContainer, RightCornerRibbon } from "react-ribbons";
 import { Colors } from '../common/Constants';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
+import { deepPurple } from '@material-ui/core/colors';
+import PeopleIcon from '@mui/icons-material/People';
+import PersonIcon from '@mui/icons-material/Person';
 
-const useStyles = makeStyles({
-    root: {
-        minWidth: 275,
-        backgroundColor: 'white',
+const useStyles = makeStyles((theme) => ({
+
+    cardTeam: {
+        width: theme.spacing(30),
+        height: theme.spacing(70),
+        borderRadius: 30,
+        background: `linear-gradient(#ffffff, ${deepPurple[200]})`,
+        boxShadow: 'none',
+        '&:hover, &:focus': {
+            boxShadow: 'rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;'
+        }
+    },
+    cardIgniter: {
+        width: theme.spacing(30),
+        height: theme.spacing(70),
+        borderRadius: 30,
+        display: 'flex',
+        flexDirection: 'column',
+        background: `linear-gradient(#ffffff, ${Colors.Gold})`,
         boxShadow: 'none',
         '&:hover, &:focus': {
             boxShadow: 'rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;'
@@ -66,14 +84,14 @@ const useStyles = makeStyles({
         bottom: 0,
         width: '100%',
     },
-});
+}));
 
 function StickyNoteDialog({ userNote, onClose, onSuccess }) {
     const classes = useStyles();
     const user = React.useContext(UserContext);
     const connectionType = user.myContacts.includes(userNote.id) ? "alreadyConnected"
         : user.contactsAddressedMe.includes(userNote.id) ? "addressedMe" : "notConnected";
-
+    const isTeam = userNote.type === "team";
 
     const onClick = async (matchConnection) => {
         if (matchConnection) {
@@ -82,7 +100,7 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
         }
 
         else {
-            sendMail(userNote.fullName, userNote.email, userNote.id);
+            sendMail(userNote.fullName, userNote.email, user.uid);
         }
 
         updateUser({
@@ -102,10 +120,10 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
         <Dialog onClose={onClose} open>
             <RibbonContainer className={classes.ribbonDialogContainer}>
                 <CardContent className={classes.rootDialog}>
-                    <RightCornerRibbon backgroundColor={userNote.type === "team" ? Colors.Purple : Colors.Gold}
-                        color={userNote.type === "team" ? '#ffff' : "black"} fontFamily="Arial"
+                    <RightCornerRibbon backgroundColor={isTeam ? Colors.Purple : Colors.Gold}
+                        color={isTeam ? '#ffff' : "black"} fontFamily="Arial"
                     >
-                        {userNote.type === "team" ? "TEAM" : "IGNITER"}
+                        {isTeam ? "TEAM" : "IGNITER"}
                     </RightCornerRibbon>
                     <Typography variant="h5" style={{ fontWeight: 'bold' }} gutterBottom>
                         MEET {user.fullName.split(' ')[0]}
@@ -115,7 +133,7 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
                         display: 'flex', alignItems: 'center', marginTop: 5,
                         padding: 10
                     }}>
-                        Skills {userNote.powers.map((power, index) => (
+                        {isTeam ? "SKILLS REQUIRED" : "SKILLS"} {userNote.powers.map((power, index) => (
                             power && power.length > 0 &&
                             <div style={{ margin: 5, fontSize: 14, fontWeight: 10 }} key={"Power" + index}>
                                 <Chip label={power} style={{ color: 'white ', backgroundColor: 'gray' }} />
@@ -168,6 +186,7 @@ function StickyNoteDialog({ userNote, onClose, onSuccess }) {
 export default function StickyNote({ userNote, openDialog = false }) {
     const classes = useStyles();
     const [dialog, setDialog] = useState();
+    const isTeam = userNote.type === "team";
 
     const openNoteDialog = () => {
         setDialog(
@@ -185,20 +204,21 @@ export default function StickyNote({ userNote, openDialog = false }) {
     }, [])
 
     return (
-        <Card className={classes.root} >
+        <Card className={isTeam ? classes.cardTeam : classes.cardIgniter} >
             <RibbonContainer className={classes.ribbon}>
                 {dialog}
-                <RightCornerRibbon backgroundColor={userNote.type === "team" ? Colors.Purple : Colors.Gold}
-                    color={userNote.type === "team" ? '#ffff' : "black"} fontFamily="Arial"
+                <RightCornerRibbon backgroundColor={isTeam ? Colors.Purple : Colors.Gold}
+                    color={isTeam ? '#ffff' : "black"} fontFamily="Arial"
                 >
-                    {userNote.type === "team" ? "TEAM" : "IGNITER"}
+                    {isTeam ? "TEAM" : "IGNITER"}
                 </RightCornerRibbon>
-                <CardContent  >
+                <CardContent>
+                    {isTeam ? <PeopleIcon /> : <PersonIcon />}
                     {
                         userNote.powers.length > 0 &&
                         <div style={{ padding: 10 }}>
                             <Typography variant="h6" style={{ fontWeight: 'bold' }} >
-                                SKILLS
+                                {isTeam ? "SKILLS REQUIRED" : "SKILLS"}
                             </Typography>
                             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 5 }}>
                                 {userNote.powers.map((power, index) => (
@@ -227,7 +247,7 @@ export default function StickyNote({ userNote, openDialog = false }) {
                     }
                     <div style={{ padding: 10 }}>
                         <Typography variant="h6" style={{ fontWeight: 'bold', marginTop: 10 }} gutterBottom >
-                            ABOUT
+                            {isTeam ? "ABOUT US" : "ABOUT"}
                         </Typography>
                         <Typography style={{ color: 'GrayText', textAlign: 'left' }} variant="body2">
                             {userNote.elevatorPitch}
@@ -236,7 +256,7 @@ export default function StickyNote({ userNote, openDialog = false }) {
                 </CardContent>
                 <Button size="medium" style={{
                     color: "white", justifyContent: 'center', backgroundColor: Colors.ButtonBackground,
-                    marginTop: 8
+                    marginTop: 'auto'
                 }}
                     onClick={() => openNoteDialog()}>
                     MORE</Button>

@@ -15,12 +15,12 @@ export default function LogOut() {
         <GeneralDesign title="Loged Out">
             <Grid container>
                 <Grid item xs>
-                    <Link href="signin" variant="body2">
+                    <Link href="signin" variant="body2" rel="noopener">
                         Sign in
                     </Link>
                 </Grid>
                 <Grid item>
-                    <Link target="_blank" href="https://www.collerignite.com/" variant="body2">
+                    <Link target="_blank" href="https://www.collerignite.com/" variant="body2" rel="noopener">
                         Visit out website
                     </Link>
                 </Grid>

@@ -13,6 +13,8 @@ import SuccessDialog from '../Dashboard/SuccessDialog';
 const useStyles = makeStyles((theme) => ({
     formControl: {
         margin: theme.spacing(3),
+        marginLeft: theme.spacing(9)
+
     },
 }));
 
@@ -31,13 +33,13 @@ export default function Powers(props) {
         }
     }, [user])
 
-    let elevatorError = elevatorPitch.length > 150;
-    let whyJoinError = whyJoin.length > 150;
+    let elevatorError = elevatorPitch.length > 250;
+    let whyJoinError = whyJoin.length > 250;
 
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        if (elevatorPitch && elevatorPitch.length <= 150 && whyJoin && whyJoin.length <= 150) {
+        if (elevatorPitch && elevatorPitch.length <= 250 && whyJoin && whyJoin.length <= 250) {
             updateUser({ elevatorPitch, whyJoin })
                 .then(() => setDialog(<SuccessDialog onClose={() => setDialog()} text="Success" />))
 
@@ -60,7 +62,7 @@ export default function Powers(props) {
                     onChange={e => setElevatorPitch(e.target.value)}
                     value={elevatorPitch}
                     error={elevatorError}
-                    helperText={elevatorError && "You can write up to 150 characters"}
+                    helperText={elevatorError && "You can write up to 250 characters"}
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault() } }}
                     multiline
                 />
@@ -75,7 +77,7 @@ export default function Powers(props) {
                     onChange={e => setWhyJoin(e.target.value)}
                     value={whyJoin}
                     error={whyJoinError}
-                    helperText={whyJoinError && "You can write up to 150 characters"}
+                    helperText={whyJoinError && "You can write up to 250 characters"}
                     onKeyDown={e => { if (e.key === "Enter") { e.preventDefault() } }}
                     multiline
                 />
